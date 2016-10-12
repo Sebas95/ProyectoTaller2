@@ -30,15 +30,17 @@ module FinitStateMachine(
 		output reg inc_o_score=0,
 		output reg displayStartPlaying=0,
 		output reg displayGanadorX=0,
-		output reg displayGanadorO=0
+		output reg displayGanadorO=0,
+		output reg turnoX = 1,
+		output reg [3:0]state =0
 		
     );
 	 
-	 reg [3:0] state     = 4'b0000; 
+	 
 	 reg [3:0] nextState = 4'b0000;
 	 //Estados disponibles de la maquina de estados con sus valores respectivos
-	 localparam [3:0] inicio = 				4'b0000;
-	 localparam [3:0] cero_0 = 			4'b0001;
+	 localparam [3:0] inicio = 				4'b0000; //0
+	 localparam [3:0] cero_0 = 				4'b0001;
 	 localparam [3:0] cero_1 = 				4'b0010;
 	 localparam [3:0] cero_2 = 				4'b0011;
 	 localparam [3:0] uno_0 = 					4'b0100;
@@ -48,12 +50,11 @@ module FinitStateMachine(
 	 localparam [3:0] dos_1 = 					4'b1000;
 	 localparam [3:0] dos_2 = 					4'b1001;
 	 localparam [3:0] revisar_ganador_O = 	4'b1010;
-	 localparam [3:0] revisar_ganador_X = 	4'b1011;
-	 localparam [3:0] r = 						4'b1100;
-	 localparam [3:0] e =						4'b1101;
-	 localparam [3:0] retorno =			   4'b1110;
+	 localparam [3:0] revisar_ganador_X = 	4'b1011; //11
+	 localparam [3:0] r = 						4'b1100; //12
+	 localparam [3:0] e =						4'b1101; //13
+	 localparam [3:0] retorno =			   4'b1110; //14
 	 ///variables locales
-	reg turnoX = 1;
 	wire click = cuadro[0]|cuadro[1]|cuadro[2]|cuadro[3]|cuadro[4]|cuadro[5]|cuadro[6]|cuadro[7]|cuadro[8];
 	wire GanoX= (x[0]&x[1]&x[2])|(x[3]&x[4]&x[5])|(x[6]&x[7]&x[8])|
 					(x[0]&x[3]&x[6])|(x[1]&x[4]&x[7])|(x[2]&x[5]&x[8])|
@@ -83,12 +84,13 @@ module FinitStateMachine(
 			end
 			cero_0://--------------------------------
 			begin
-				if(cuadro[0] & turnoX)
+				displayStartPlaying=0;
+				if(cuadro[0] & turnoX & ~o[0] & ~x[0])
 				begin
 					nextState=revisar_ganador_X;
 					x[0]=1;
 				end
-				else if(cuadro[0] & ~turnoX)
+				else if(cuadro[0] & ~turnoX & ~o[0] & ~x[0])
 				begin
 					nextState=revisar_ganador_O;
 					o[0]=1;
@@ -98,12 +100,12 @@ module FinitStateMachine(
 			end
 			cero_1://--------------------------------
 			begin				
-				if(cuadro[1] & turnoX)
+				if(cuadro[1] & turnoX & ~o[1] & ~x[1])
 				begin
 					nextState=revisar_ganador_X;
 					x[1]=1;
 				end
-				else if(cuadro[1] & ~turnoX)
+				else if(cuadro[1] & ~turnoX & ~o[1] & ~x[1])
 				begin
 					nextState=revisar_ganador_O;
 					o[1]=1;
@@ -113,12 +115,12 @@ module FinitStateMachine(
 			end
 			cero_2://--------------------------------
 			begin				
-				if(cuadro[2] & turnoX)
+				if(cuadro[2] & turnoX& ~o[2] & ~x[2])
 				begin
 					nextState=revisar_ganador_X;
 					x[2]=1;
 				end
-				else if(cuadro[2] & ~turnoX)
+				else if(cuadro[2] & ~turnoX & ~o[2] & ~x[2])
 				begin
 					nextState=revisar_ganador_O;
 					o[2]=1;
@@ -129,12 +131,12 @@ module FinitStateMachine(
 			end
 			uno_0://--------------------------------
 			begin				
-				if(cuadro[3] & turnoX)
+				if(cuadro[3] & turnoX & ~o[3] & ~x[3])
 				begin
 					nextState=revisar_ganador_X;
 					x[3]=1;
 				end
-				else if(cuadro[3] & ~turnoX)
+				else if(cuadro[3] & ~turnoX & ~o[3] & ~x[3])
 				begin
 					nextState=revisar_ganador_O;
 					o[3]=1;
@@ -145,12 +147,12 @@ module FinitStateMachine(
 			end
 			uno_1://--------------------------------
 			begin				
-			if(cuadro[4] & turnoX)
+			if(cuadro[4] & turnoX & ~o[4] & ~x[4])
 				begin
 					nextState=revisar_ganador_X;
 					x[4]=1;
 				end
-				else if(cuadro[4] & ~turnoX)
+				else if(cuadro[4] & ~turnoX & ~o[4] & ~x[4])
 				begin
 					nextState=revisar_ganador_O;
 					o[4]=1;
@@ -160,12 +162,12 @@ module FinitStateMachine(
 			end
 			uno_2://--------------------------------
 			begin
-				if(cuadro[5] & turnoX)
+				if(cuadro[5] & turnoX & ~o[5] & ~x[5])
 				begin
 					nextState=revisar_ganador_X;
 					x[5]=1;
 				end
-				else if(cuadro[5] & ~turnoX)
+				else if(cuadro[5] & ~turnoX  & ~o[5] & ~x[5])
 				begin
 					nextState=revisar_ganador_O;
 					o[5]=1;
@@ -176,12 +178,12 @@ module FinitStateMachine(
 			end
 			dos_0://--------------------------------
 			begin
-				if(cuadro[6] & turnoX)
+				if(cuadro[6] & turnoX  & ~o[6] & ~x[6])
 				begin
 					nextState=revisar_ganador_X;
 					x[6]=1;
 				end
-				else if(cuadro[6] & ~turnoX)
+				else if(cuadro[6] & ~turnoX & ~o[6] & ~x[6])
 				begin
 					nextState=revisar_ganador_O;
 					o[6]=1;
@@ -192,12 +194,12 @@ module FinitStateMachine(
 			end
 			dos_1://--------------------------------
 			begin
-				if(cuadro[7] & turnoX)
+				if(cuadro[7] & turnoX & ~o[7] & ~x[7])
 				begin
 					nextState=revisar_ganador_X;
 					x[7]=1;
 				end
-				else if(cuadro[7] & ~turnoX)
+				else if(cuadro[7] & ~turnoX  & ~o[7] & ~x[7])
 				begin
 					nextState=revisar_ganador_O;
 					o[7]=1;
@@ -208,19 +210,22 @@ module FinitStateMachine(
 			end
 			dos_2://--------------------------------
 			begin
-				if(cuadro[8] & turnoX)
+				if(cuadro[8] & turnoX  & ~o[8] & ~x[8])
 				begin
 					nextState=revisar_ganador_X;
 					x[8]=1;
 				end
-				else if(cuadro[8] & ~turnoX)
+				else if(cuadro[8] & ~turnoX & ~o[8] & ~x[8])
 				begin
 					nextState=revisar_ganador_O;
 					o[8]=1;
 				end 
+				else if(~cuadro[8])
+					nextState= retorno;
 			end
 			revisar_ganador_O://--------------------
 			begin
+			turnoX=~turnoX;
 			if(GanoO)
 			begin
 				inc_o_score=1;
@@ -233,6 +238,7 @@ module FinitStateMachine(
 			end
 			revisar_ganador_X://--------------------
 			begin
+				turnoX=~turnoX;
 				if(GanoX)
 				begin
 					inc_x_score=1;
