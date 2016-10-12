@@ -1,0 +1,24 @@
+NET "CLK_100MHZ" LOC = V10;
+NET "CLK_100MHZ" PERIOD = 20.0ns HIGH 40%;
+
+NET "rgb[2]" LOC = U7;
+NET "rgb[2]" LOC = V7;
+NET "rgb[2]" LOC = N7;
+
+NET "rgb[1]" LOC = P8;
+NET "rgb[1]" LOC = T6;
+NET "rgb[1]" LOC = V6;
+
+NET "rgb[0]" LOC = R7;
+NET "rgb[0]" LOC = T7;
+
+NET "hsync" LOC = N6;     
+NET "vsync" LOC = P7;
+
+NET "left" CLOCK_DEDICATED_ROUTE = FALSE; 
+NET "right" CLOCK_DEDICATED_ROUTE = FALSE; 
+
+NET "left"  LOC = C4 | PULLUP;
+NET "right" LOC = D9 | PULLUP;
+
+
