@@ -8,29 +8,50 @@ module TicTacToeTextPainter
     input wire  [9:0] pix_x, pix_y,
 	 input wire [7:0] font_word,
 	 input wire pixel_tick,	 
-    output wire [17:0] text_on,
+	 input wire [8:0] xm, ym,
+    output wire [31:0] text_on,
     output reg  [2:0] text_rgb =0,
 	 output wire [10:0] rom_addr
    );
 
-   // signal declaration
-   reg  [6:0] char_addr=0;reg  [6:0] char_addr_s = 0;reg  [6:0] char_addr_st = 0;
-	reg  [6:0] char_addr_rt = 0; reg  [6:0] char_addr_e = 0;  
-	reg  [6:0] char_addr_xo1 = 0, char_addr_xo2 = 0, char_addr_xo3 = 0, char_addr_xo4 = 0, char_addr_xo5 = 0,
-		char_addr_xo6 = 0, char_addr_xo7 = 0,char_addr_xo8 = 0;
-   reg  [3:0] row_addr=0; wire  [3:0] row_addr_rt;
-   wire [3:0] row_addr_s;wire [3:0] row_addr_st;  wire  [3:0] row_addr_e;
-	wire [3:0] row_addr_xo1, row_addr_xo2, row_addr_xo3,  row_addr_xo4,  row_addr_xo5,  row_addr_xo6,
-		 row_addr_xo7,  row_addr_xo8;
-   reg  [2:0] bit_addr=0;    
-	wire [2:0] bit_addr_s;wire [2:0] bit_addr_st;wire [2:0] bit_addr_rt; wire [2:0] bit_addr_e;
-	wire [2:0] bit_addr_xo1, bit_addr_xo1, bit_addr_xo1, bit_addr_xo1 , bit_addr_xo1 ,bit_addr_xo1,
-		bit_addr_xo1, bit_addr_xo1, bit_addr_xo1;
+   // signal declaration---------------------------------------------------------------------
+	
+	//Declaration of the column of the characters
+	
+   reg  [6:0] char_addr=0, char_addr_s = 0, char_addr_st = 0, char_addr_rt = 0,  char_addr_e = 0, 
+	char_addr_xo1 = 0, char_addr_xo2 = 0, char_addr_xo3 = 0, char_addr_xo4 = 0, char_addr_xo5 = 0,
+	char_addr_xo6 = 0, char_addr_xo7 = 0,char_addr_xo8 = 0;
+	
+   reg  [3:0] row_addr=0; 
+	
+	//Declaration for the row of the characters
+	
+	wire  [3:0] row_addr_rt, row_addr_s, row_addr_st, row_addr_e,row_addr_xo1, row_addr_xo2, 
+	row_addr_xo3,  row_addr_xo4,  row_addr_xo5,  row_addr_xo6,  row_addr_xo7,  row_addr_xo8;
+   reg  [2:0] bit_addr=0; 
+	
+	//Declaration for the bit of each row of the ROMM
+   
+	wire [2:0] bit_addr_s,bit_addr_st, bit_addr_rt, bit_addr_e, bit_addr_xo1, bit_addr_xo1, 
+	bit_addr_xo1, bit_addr_xo1 , bit_addr_xo1 ,bit_addr_xo1, bit_addr_xo1, bit_addr_xo1, bit_addr_xo1;
    wire font_bit, score_on;
+	
 	reg state_on = 0;
 	reg [2:0] nextRGB = 3'b000;
 	
-	wire 	bar_left_on, bar_right_on, bar_up_on, bar_down_on, restart_on, erase_on, restart_underline_on;
+	//Mouse register
+	
+	//Initial value
+	reg [9:0] mouse_x = 245;
+	reg [9:0] mouse_y = 245;
+	
+	
+	//Auxulir value
+	wire [9:0] mouse_x_coor;
+	wire [9:0] mouse_y_coor;
+	
+	//Wire to know when the elements are on the screen
+	wire 	bar_left_on, bar_right_on, bar_up_on, bar_down_on, restart_on, erase_on, restart_underline_on, mouse_on;
 	wire xo0_on, xo1_on, xo2_on, xo3_on, xo4_on, xo5_on, xo6_on, xo7_on, xo8_on;
 	
 	//Colores Constantes
@@ -136,7 +157,32 @@ module TicTacToeTextPainter
 	assign score_underline_on = (pix_y > 443) && 
 								 (pix_y < 445) &&	
 								 (pix_x > 352) &&
-								 (pix_x < 526);								 
+								 (pix_x < 526);
+								 
+	assign refr_tick = (pix_y==481) && (pix_x==0);
+	reg [9:0] mouse_xAux = 0;
+	reg [9:0] mouse_yAux = 0;
+	
+	always @(posedge clk)
+		begin
+			mouse_x <= mouse_xAux;
+			mouse_y <= mouse_yAux;
+		end
+	
+	always@*
+		begin
+			if(refr_tick)
+				begin					
+							mouse_xAux = mouse_x + xm[8:7];
+							mouse_yAux = mouse_y + ym[8:7];
+				end
+		end
+	
+	assign mouse_x_coor = mouse_x ;
+	assign mouse_y_coor = mouse_y ;
+								 
+	assign mouse_on = (pix_x > mouse_x_coor) && (pix_x <mouse_x_coor + 15) && 
+							(pix_y > mouse_y_coor) && (pix_y <mouse_y_coor + 15);					
 
    //-------------------------------------------
    // Temporizador
@@ -317,10 +363,14 @@ module TicTacToeTextPainter
 			endcase			
 		end
 	end	
+
+//	Pinta el mouse
+
+
 	
-   //-------------------------------------------
-   // Aqui se escoge cual color enviar a colocar mientras se encuentre cada elemento encima
-   //-------------------------------------------
+//-------------------------------------------
+// Aqui se escoge cual color enviar a colocar mientras se encuentre cada elemento encima
+//-------------------------------------------
    always @*
 		begin //Para sincronizar con el pixy evitar indeseados erroes
 			if(pixel_tick)
@@ -353,6 +403,10 @@ module TicTacToeTextPainter
 							else 
 								text_rgb = BLACK;	
 						end
+					else if(mouse_on)
+						begin
+							text_rgb = GREEN;
+						end						
 					else if (restart_on)   //Si el label de restar está encima 
 						begin
 							char_addr = char_addr_rt;
@@ -383,7 +437,7 @@ module TicTacToeTextPainter
 	
 
 
-   assign text_on = {xo8_on, xo7_on, xo6_on,xo5_on,xo4_on, xo3_on,xo2_on,xo1_on, xo0_on,
+   assign text_on = {xo8_on, mouse_on, xo7_on, xo6_on,xo5_on,xo4_on, xo3_on,xo2_on,xo1_on, xo0_on,
 								score_underline_on, restart_underline_on,erase_on, restart_on, bar_left_on,
 								bar_right_on, bar_up_on, bar_down_on, state_on};
    //-------------------------------------------

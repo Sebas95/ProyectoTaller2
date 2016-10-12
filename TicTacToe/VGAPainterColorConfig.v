@@ -23,11 +23,12 @@ module VGAPainterColorConfig(
 	input wire left,
 	input wire right,
 	input wire clk_100MHz,
+	input wire [8:0] xm, ym,
    output wire hsync, vsync,
    output wire [2:0] rgb
 	);
 	wire [2:0] nextRGB;
-	wire [17:0] txt_on;
+	wire [31:0] txt_on;
 	wire [2:0] video_on;
 	wire [9:0] pixel_x, pixel_y;
 	
@@ -43,7 +44,9 @@ module VGAPainterColorConfig(
 		.video_on(video_on),
 		.text_on(txt_on),
 		.pixel_x(pixel_x),
-		.pixel_y(pixel_y)
+		.pixel_y(pixel_y),
+		.xm(xm),
+		.ym(ym)
 	);	
 	
 	//Instanciación para la configuración de colores

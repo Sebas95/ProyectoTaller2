@@ -23,7 +23,7 @@ module vgaColorConfig(
 	 input wire [9:0] pixel_y,
     input wire [2:0] nextRGB,
     input wire video_on,
-	 input wire [17:0] txt_on,
+	 input wire [31:0] txt_on,
     output wire [2:0] rgb
     );
 	 
@@ -37,7 +37,7 @@ module vgaColorConfig(
 		else	//Si alguno de los elementos que despliego esta en estos momentos encima
 			if (txt_on[0] || txt_on[1] || txt_on[2] || txt_on[3] || txt_on[4] || txt_on[5] || txt_on[6]
 				|| txt_on[7] || txt_on[8] || txt_on[9] || txt_on[10] || txt_on[11] || txt_on[12]
-					|| txt_on[13] || txt_on[14] || txt_on[15] || txt_on[16] || txt_on[17]) 
+					|| txt_on[13] || txt_on[14] || txt_on[15] || txt_on[16] || txt_on[17] || txt_on[18]) 
 				rgbAux = nextRGB; //asigno en color que proviene del modulo anterior
 			else //Si no asigno cero 	
 				if(pixel_y > 400)

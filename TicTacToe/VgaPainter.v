@@ -42,10 +42,11 @@ module VgaPainter(
 	input	wire left,
 	input	wire right,
 	input wire clk_100MHz,
+	input wire [8:0] xm, ym,
    output wire hsync, vsync,
    output wire [2:0] rgb,
 	output wire video_on,
-	output wire [17:0] text_on,
+	output wire [31:0] text_on,
 	output wire [9:0] pixel_x, pixel_y
     );
 
@@ -94,7 +95,9 @@ module VgaPainter(
 		 .pixel_tick(pixel_tick),
 		 .text_on(text_on),
 		 .text_rgb(rgb),
-		 .rom_addr(rom_addr)
+		 .rom_addr(rom_addr),
+		 .xm(xm),
+		 .ym(ym)
 	);
 	
 	//Divisor de frecuencia de 1HZ
