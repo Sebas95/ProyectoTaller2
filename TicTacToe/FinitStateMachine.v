@@ -19,7 +19,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module FinitStateMachine(
-		input clk_100MHz, reset,
+		input clk_100MHz, reset,       
 		input [8:0]cuadro,
 		input erase,
 		input restart,
