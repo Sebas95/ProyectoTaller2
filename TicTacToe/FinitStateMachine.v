@@ -22,7 +22,7 @@ module FinitStateMachine(
 		input clk_100MHz, reset,       
 		input [8:0]cuadro,
 		input erase,
-		input restart,
+		input restart,  
 		output reg [8:0]x=0,
 		output reg [8:0]o=0,
 		output reg resetScore=0,
