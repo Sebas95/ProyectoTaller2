@@ -18,7 +18,12 @@ NET "vsync" LOC = P7;
 NET "left" CLOCK_DEDICATED_ROUTE = FALSE; 
 NET "right" CLOCK_DEDICATED_ROUTE = FALSE; 
 
-NET "left"  LOC = C4 | PULLUP;
-NET "right" LOC = D9 | PULLUP;
+NET "left"  LOC = C4;
+NET "right" LOC = D9;
+
+NET "ps2d" LOC= K14 | PULLUP;
+NET "ps2c" LOC= L13 | PULLUP;
+
+NET "m_done_tick" LOC = U16;
 
 

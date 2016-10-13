@@ -160,8 +160,8 @@ module TicTacToeTextPainter
 								 (pix_x < 526);
 								 
 	assign refr_tick = (pix_y==481) && (pix_x==0);
-	reg [9:0] mouse_xAux = 0;
-	reg [9:0] mouse_yAux = 0;
+	reg [9:0] mouse_xAux = 50;
+	reg [9:0] mouse_yAux = 50;
 	
 	always @(posedge clk)
 		begin
