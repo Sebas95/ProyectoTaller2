@@ -171,10 +171,27 @@ module TicTacToeTextPainter
 	
 	always@*
 		begin
-			if(refr_tick)
-				begin					
-							mouse_xAux = mouse_x + xm[8:7];
-							mouse_yAux = mouse_y + ym[8:7];
+			/*if(refr_tick && xm[8] && (xm > 0))	
+				begin
+					mouse_xAux <= mouse_x - 2;					
+				end
+			else if(refr_tick && ~xm[8] && (xm > 0))	
+				begin
+					mouse_xAux <= mouse_x + 4;					
+				end		*/
+			if(refr_tick && ym[8] && (ym > 0))	
+				begin
+					mouse_yAux <= mouse_y - 2;
+				end
+			else if(refr_tick && ~ym[8] && (ym > 0))	
+				begin
+					mouse_yAux <= mouse_y + 4;
+				end
+				
+			else
+				begin
+					mouse_xAux <= mouse_x;
+					mouse_yAux <= mouse_y;
 				end
 		end
 	

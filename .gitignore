@@ -66,3 +66,8 @@ TicTacToe/FinitStateMachine.syr
 *.syr
 *.pcf
 TicTacToe/FinitStateMachine.ngr
+*.ut
+TicTacToe/TicTacToe_bitgen.xwbt
+*.ngd
+*.drc
+*.bgn
