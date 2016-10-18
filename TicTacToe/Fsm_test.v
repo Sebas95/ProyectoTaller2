@@ -30,6 +30,7 @@ module fsm_test;
 	reg [8:0] cuadro;
 	reg erase;
 	reg restart;
+	reg randomClick;
 
 	// Outputs
 	wire [8:0] x;
@@ -40,6 +41,7 @@ module fsm_test;
 	wire displayStartPlaying;
 	wire displayGanadorX;
 	wire displayGanadorO;
+	wire displayEmpate;
 	wire turnoX;
    wire [3:0]state;
 	// Instantiate the Unit Under Test (UUT)
@@ -48,7 +50,8 @@ module fsm_test;
 		.reset(reset), 
 		.cuadro(cuadro), 
 		.erase(erase), 
-		.restart(restart), 
+		.restart(restart),
+		.randomClick(randomClick),		
 		.x(x), 
 		.o(o), 
 		.resetScore(resetScore), 
@@ -57,6 +60,7 @@ module fsm_test;
 		.displayStartPlaying(displayStartPlaying), 
 		.displayGanadorX(displayGanadorX), 
 		.displayGanadorO(displayGanadorO), 
+		.displayEmpate(displayEmpate),
 		.turnoX(turnoX),
 		.state(state)
 	);
@@ -68,36 +72,39 @@ module fsm_test;
 		cuadro = 0;
 		erase = 0;
 		restart = 0;
+		randomClick=0;
 
 		// Wait 100 ns for global reset to finish
 		#100;
         
 		// Add stimulus here
 		
-		cuadro[0]=1;
+		cuadro[0]=1; //marca x en cuadro 0
 		#1000;
 		cuadro[0]=0;
 		#100;
 		
-		cuadro[3]=1;
+		cuadro[3]=1; //marca 0 en cuadro 3
 		#1000;
 		cuadro[3]=0;
 		#100;
 		
-		cuadro[1]=1;
+		cuadro[1]=1; //marca x en cuadro 1
 		#1000;
 		cuadro[1]=0;
 		#100;
 		
-		cuadro[8]=1;
+		cuadro[8]=1; //marca o en cuadro 8
 		#1000;
 		cuadro[8]=0;
 		#100;
 		
-		cuadro[2]=1;
+		cuadro[2]=1; //marca x en cuadro 2
 		#1000;
 		cuadro[2]=0;
 		#100;
+		
+		randomClick=1;
 
 	end
       

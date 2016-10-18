@@ -23,6 +23,7 @@ module FinitStateMachine(
 		input [8:0]cuadro,
 		input erase,
 		input restart,  
+		input randomClick,
 		output reg [8:0]x=0,
 		output reg [8:0]o=0,
 		output reg resetScore=0,
@@ -31,6 +32,7 @@ module FinitStateMachine(
 		output reg displayStartPlaying=0,
 		output reg displayGanadorX=0,
 		output reg displayGanadorO=0,
+		output reg displayEmpate=0,
 		output reg turnoX = 1,
 		output reg [3:0]state =0
 		
@@ -40,29 +42,38 @@ module FinitStateMachine(
 	 reg [3:0] nextState = 4'b0000;
 	 //Estados disponibles de la maquina de estados con sus valores respectivos
 	 localparam [3:0] inicio = 				4'b0000; //0
-	 localparam [3:0] cero_0 = 				4'b0001;
-	 localparam [3:0] cero_1 = 				4'b0010;
-	 localparam [3:0] cero_2 = 				4'b0011;
-	 localparam [3:0] uno_0 = 					4'b0100;
-	 localparam [3:0] uno_1 = 					4'b0101;
-	 localparam [3:0] uno_2 = 					4'b0110;
-	 localparam [3:0] dos_0 = 					4'b0111;
-	 localparam [3:0] dos_1 = 					4'b1000;
-	 localparam [3:0] dos_2 = 					4'b1001;
-	 localparam [3:0] revisar_ganador_O = 	4'b1010;
+	 localparam [3:0] cero_0 = 				4'b0001; //1
+	 localparam [3:0] cero_1 = 				4'b0010; //2
+	 localparam [3:0] cero_2 = 				4'b0011; //3
+	 localparam [3:0] uno_0 = 					4'b0100; //4
+	 localparam [3:0] uno_1 = 					4'b0101; //5
+	 localparam [3:0] uno_2 = 					4'b0110; //6
+	 localparam [3:0] dos_0 = 					4'b0111; //7
+	 localparam [3:0] dos_1 = 					4'b1000; //8
+	 localparam [3:0] dos_2 = 					4'b1001; //9
+	 localparam [3:0] revisar_ganador_O = 	4'b1010; //10
 	 localparam [3:0] revisar_ganador_X = 	4'b1011; //11
 	 localparam [3:0] r = 						4'b1100; //12
 	 localparam [3:0] e =						4'b1101; //13
 	 localparam [3:0] retorno =			   4'b1110; //14
-	 ///variables locales
-	wire click = cuadro[0]|cuadro[1]|cuadro[2]|cuadro[3]|cuadro[4]|cuadro[5]|cuadro[6]|cuadro[7]|cuadro[8];
+	 localparam [3:0] espera =			   	4'b1111; //15
+	 
+	///condiciones
+	//si hizo click en algun cuadrante
+	wire click = cuadro[0]|cuadro[1]|cuadro[2]|cuadro[3]|cuadro[4]|
+					cuadro[5]|cuadro[6]|cuadro[7]|cuadro[8];
+	//ganó jugador X
 	wire GanoX= (x[0]&x[1]&x[2])|(x[3]&x[4]&x[5])|(x[6]&x[7]&x[8])|
 					(x[0]&x[3]&x[6])|(x[1]&x[4]&x[7])|(x[2]&x[5]&x[8])|
 					(x[0]&x[4]&x[8])|(x[2]&x[4]&x[6]);
-					
+	//ganó jugador O				
 	wire GanoO= (o[0]&o[1]&o[2])|(o[3]&o[4]&o[5])|(o[6]&o[7]&o[8])|
 					(o[0]&o[3]&o[6])|(o[1]&o[4]&o[7])|(o[2]&o[5]&o[8])|
 					(o[0]&o[4]&o[8])|(o[2]&o[4]&o[6]);
+	//revisa si hay empate				
+	wire Empate = x[0]&x[1]&x[2]&x[3]&x[4]&x[5]&x[6]&x[7]&x[8]&
+					  o[0]&o[1]&o[2]&o[3]&o[4]&o[5]&o[6]&o[7]&o[8]&
+					  (~GanoX)&(~GanoO);
 	
 	
 	always @*
@@ -76,15 +87,18 @@ module FinitStateMachine(
 				inc_o_score=0;
 				displayGanadorX=0;
 				displayGanadorO=0;
+				displayEmpate=0;
 				resetScore=0;
 				if(click)
+				begin
+					displayStartPlaying=0;
 					nextState=cero_0;
+				end
 				else
 					nextState=inicio;
 			end
 			cero_0://--------------------------------
 			begin
-				displayStartPlaying=0;
 				if(cuadro[0] & turnoX & ~o[0] & ~x[0])
 				begin
 					nextState=revisar_ganador_X;
@@ -230,9 +244,14 @@ module FinitStateMachine(
 			begin
 				inc_o_score=1;
 				displayGanadorO=1;
-				nextState=inicio;
+				nextState=espera;
 			end
-			else
+			else if(Empate)
+			begin
+				displayEmpate=1;
+				nextState=espera;
+			end
+			else if(~GanoO & ~Empate)
 				nextState=r;
 			
 			end
@@ -243,10 +262,22 @@ module FinitStateMachine(
 				begin
 					inc_x_score=1;
 					displayGanadorX=1;
-					nextState=inicio;
+					nextState=espera;
 				end
-				else
+				else if(Empate)
+				begin
+					displayEmpate=1;
+					nextState=espera;
+				end
+				else if(~GanoX & ~Empate)
 					nextState=r;
+			end
+			espera://--------------------
+			begin
+			if(randomClick)
+				nextState=inicio;
+			else
+				nextState=espera;
 			end
 			r://------------------------------------
 			begin
