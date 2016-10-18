@@ -19,7 +19,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module VGAPainterColorConfig(
-
+	input wire up,
+	input wire down,
 	input wire left,
 	input wire right,
 	input wire clk_100MHz,
@@ -31,6 +32,8 @@ module VGAPainterColorConfig(
 	wire [31:0] txt_on;
 	wire [2:0] video_on;
 	wire [9:0] pixel_x, pixel_y;
+	wire text_on_start;
+	wire [2:0] text_on_winner;
 	
 		//Instanciacion para la sincronización con vga
 	 
@@ -43,10 +46,14 @@ module VGAPainterColorConfig(
 		.rgb(nextRGB),
 		.video_on(video_on),
 		.text_on(txt_on),
+		.text_on_start(text_on_start),
+		.text_on_winner(text_on_winner),
 		.pixel_x(pixel_x),
 		.pixel_y(pixel_y),
 		.xm(xm),
-		.ym(ym)
+		.ym(ym),
+		.up(up),
+		.down(down)
 	);	
 	
 	//Instanciación para la configuración de colores
@@ -56,7 +63,9 @@ module VGAPainterColorConfig(
 		.rgb(rgb),
 		.txt_on(txt_on),
 		.pixel_x(pixel_x),
-		.pixel_y(pixel_y)		
+		.pixel_y(pixel_y),
+		.text_on_start(text_on_start),
+		.text_on_winner(text_on_winner)
 	);
 
 

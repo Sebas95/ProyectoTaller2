@@ -1,6 +1,8 @@
 // Listing 14.6
 module TicTacToeTextPainter
    (
+	 input wire up,
+	 input wire down,	
 	 input wire left,
 	 input wire right,
     input wire  clk, 
@@ -9,6 +11,7 @@ module TicTacToeTextPainter
 	 input wire [7:0] font_word,
 	 input wire pixel_tick,	 
 	 input wire [8:0] xm, ym,
+	 input wire ce,
     output wire [31:0] text_on,
     output reg  [2:0] text_rgb =0,
 	 output wire [10:0] rom_addr
@@ -178,7 +181,7 @@ module TicTacToeTextPainter
 			else if(refr_tick && ~xm[8] && (xm > 0))	
 				begin
 					mouse_xAux <= mouse_x + 4;					
-				end		*/
+				end		
 			if(refr_tick && ym[8] && (ym > 0))	
 				begin
 					mouse_yAux <= mouse_y - 2;
@@ -186,8 +189,15 @@ module TicTacToeTextPainter
 			else if(refr_tick && ~ym[8] && (ym > 0))	
 				begin
 					mouse_yAux <= mouse_y + 4;
-				end
-				
+				end*/
+			if(refr_tick && left)
+				mouse_xAux <= mouse_x - 2;	
+			else if(refr_tick && right)
+				mouse_xAux <= mouse_x + 2;		
+			else if(refr_tick && up)
+				mouse_yAux <= mouse_y - 2;	
+			else if(refr_tick && down)
+				mouse_yAux <= mouse_y + 2;					
 			else
 				begin
 					mouse_xAux <= mouse_x;
@@ -390,7 +400,7 @@ module TicTacToeTextPainter
 //-------------------------------------------
    always @*
 		begin //Para sincronizar con el pixy evitar indeseados erroes
-			if(pixel_tick)
+			if(pixel_tick && ce)
 				begin
 					text_rgb = 3'b000;  // fonodo negro
 					if (state_on) //Si esta el estado encima

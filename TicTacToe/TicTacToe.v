@@ -21,6 +21,8 @@
 module TicTacToe(
 	input wire CLK_100MHZ,
 	input wire reset,
+	input wire up,
+	input wire down,	
 	input wire left,
 	input wire right,
 	inout wire ps2d, ps2c,
@@ -42,6 +44,8 @@ module TicTacToe(
        .m_done_tick(m_done_tick));
 		 
    VGAPainterColorConfig VGAPCC (
+	.up(up),
+	.down(down),
 	.left(left),
 	.right(right),
 	.clk_100MHz(CLK_100MHZ),
