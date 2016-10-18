@@ -37,6 +37,10 @@ module TicTacToe(
 	
 	wire [8:0] xm;
 	wire [8:0] ym;
+	
+	reg  cePS = 0;
+	reg  ceSS = 1;
+	reg  ceWS = 0;
 
    mouse mouse_unit
       (.clk(clk_50MHz), .reset(reset), .ps2d(ps2d), .ps2c(ps2c),
@@ -53,7 +57,10 @@ module TicTacToe(
 	.vsync(vsync),
    .rgb(rgb),
 	.xm(xm),
-	.ym(ym)
+	.ym(ym),
+	.cePS(cePS),
+	.ceWS(ceWS),
+	.ceSS(ceSS)
 	);
 
 endmodule

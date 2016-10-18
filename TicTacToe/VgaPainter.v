@@ -45,6 +45,9 @@ module VgaPainter(
 	input	wire down,	
 	input wire clk_100MHz,
 	input wire [8:0] xm, ym,
+	input wire cePS,
+	input wire ceWS,
+	input wire ceSS,
    output wire hsync, vsync,
    output wire [2:0] rgb,
 	output wire video_on,
@@ -65,9 +68,6 @@ module VgaPainter(
 	wire [10:0] rom_addr_PS;
 	wire [10:0] rom_addr_SS;	
 	wire [10:0] rom_addr_WS;
-	reg  cePS = 1;
-	reg  ceSS = 0;
-	reg  ceWS = 0;
 
 	//devisor de frecuencia pra el controlador VGA
 	reg clk_50MHz = 0;
