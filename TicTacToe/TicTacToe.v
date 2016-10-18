@@ -90,7 +90,7 @@ module TicTacToe(
 	.ceWSX(ceWinnerXSreen),
 	.ceWSO(ceWinnerOSreen),
 	.ceT(ceTieSreen),
-	.ceSS(ceStartScreen),
+	.ceSS(ceStartScreen)
 	);
 
 endmodule

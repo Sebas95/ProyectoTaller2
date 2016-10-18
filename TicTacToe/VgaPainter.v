@@ -46,7 +46,7 @@ module VgaPainter(
 	input wire clk_100MHz,
 	input wire [8:0] xm, ym,
 	input wire cePS,
-	input wire ceWS,
+	input wire ceWSX,
 	input wire ceSS,
    output wire hsync, vsync,
    output wire [2:0] rgb,
@@ -110,7 +110,8 @@ module VgaPainter(
 		 .rom_addr(rom_addr_PS),
 		 .xm(xm),
 		 .ym(ym),
-		 .ce(cePS)
+		 .ce(cePS),
+		 .ceSS(ceSS)
 	);
 	
 	//Pantalla de inicio
@@ -147,7 +148,7 @@ module VgaPainter(
 	);
 	
 	screensDeco wD(
-	.ceWS(ceWS),
+	.ceWS(ceWSX),
 	.cePS(cePS),
 	.ceSS(ceSS),
 	.rgbWS(rgbWS),

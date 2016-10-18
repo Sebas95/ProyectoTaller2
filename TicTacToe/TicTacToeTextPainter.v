@@ -7,6 +7,7 @@ module TicTacToeTextPainter
 	 input wire right,
     input wire  clk, 
 	 input wire  clk1Hz, 
+	 input wire ceSS,
     input wire  [9:0] pix_x, pix_y,
 	 input wire [7:0] font_word,
 	 input wire pixel_tick,	 
@@ -21,7 +22,7 @@ module TicTacToeTextPainter
 	
 	//Declaration of the column of the characters
 	
-   reg  [6:0] char_addr=0, char_addr_s = 0, char_addr_st = 0, char_addr_rt = 0,  char_addr_e = 0, 
+   reg  [6:0] char_addr=0, char_addr_ss=0, char_addr_s = 0, char_addr_st = 0, char_addr_rt = 0,  char_addr_e = 0, 
 	char_addr_xo1 = 0, char_addr_xo2 = 0, char_addr_xo3 = 0, char_addr_xo4 = 0, char_addr_xo5 = 0,
 	char_addr_xo6 = 0, char_addr_xo7 = 0,char_addr_xo8 = 0;
 	
@@ -29,13 +30,13 @@ module TicTacToeTextPainter
 	
 	//Declaration for the row of the characters
 	
-	wire  [3:0] row_addr_rt, row_addr_s, row_addr_st, row_addr_e,row_addr_xo1, row_addr_xo2, 
+	wire  [3:0] row_addr_rt, row_addr_ss, row_addr_st, row_addr_e,row_addr_xo1, row_addr_xo2, 
 	row_addr_xo3,  row_addr_xo4,  row_addr_xo5,  row_addr_xo6,  row_addr_xo7,  row_addr_xo8;
    reg  [2:0] bit_addr=0; 
 	
 	//Declaration for the bit of each row of the ROMM
    
-	wire [2:0] bit_addr_s,bit_addr_st, bit_addr_rt, bit_addr_e, bit_addr_xo1, bit_addr_xo1, 
+	wire [2:0] bit_addr_ss,bit_addr_st, bit_addr_rt, bit_addr_e, bit_addr_xo1, bit_addr_xo1, 
 	bit_addr_xo1, bit_addr_xo1 , bit_addr_xo1 ,bit_addr_xo1, bit_addr_xo1, bit_addr_xo1, bit_addr_xo1;
    wire font_bit, score_on;
 	
@@ -55,7 +56,7 @@ module TicTacToeTextPainter
 	
 	//Wire to know when the elements are on the screen
 	wire 	bar_left_on, bar_right_on, bar_up_on, bar_down_on, restart_on, erase_on, restart_underline_on, mouse_on;
-	wire xo0_on, xo1_on, xo2_on, xo3_on, xo4_on, xo5_on, xo6_on, xo7_on, xo8_on;
+	wire xo0_on, xo1_on, xo2_on, xo3_on, xo4_on, xo5_on, xo6_on, xo7_on, xo8_on, playing_on_ss;
 	
 	//Colores Constantes
 	localparam BLACK 		= 3'b000;
@@ -391,6 +392,39 @@ module TicTacToeTextPainter
 		end
 	end	
 
+
+   //-------------------------------------------
+   // Titulo
+   //  - Despliega en el titulo "Start Playing"
+   //  - Escala  32-64 
+   //-------------------------------------------
+   assign row_addr_ss = pix_y[5:2];
+   assign bit_addr_ss = pix_x[4:2];
+	assign playing_on_ss = (pix_y[9:6]==1) && ((pix_x[9:5]>2) && (pix_x[9:5]<18));
+   always @*
+	begin		
+		char_addr_ss = 7'h00;
+		begin				
+			case (pix_x[8:5])
+				4'h3: char_addr_ss = 7'h53; // S
+				4'h4: char_addr_ss = 7'h74; // t
+				4'h5: char_addr_ss = 7'h61; // a
+				4'h6: char_addr_ss = 7'h72; // r
+				4'h7: char_addr_ss = 7'h74; // t
+				4'h8: char_addr_ss = 7'h00; // 
+				4'h9: char_addr_ss = 7'h50; // P
+				4'ha: char_addr_ss = 7'h6c; // l
+				4'hb: char_addr_ss = 7'h61; // a
+				4'hc: char_addr_ss = 7'h79; // y
+				4'hd: char_addr_ss = 7'h69; // i
+				4'he: char_addr_ss = 7'h6e; // n
+				4'hf: char_addr_ss = 7'h67; // g
+				default : char_addr_ss = 7'h00;
+			endcase			
+		end
+	end
+
+
 //	Pinta el mouse
 
 
@@ -400,10 +434,10 @@ module TicTacToeTextPainter
 //-------------------------------------------
    always @*
 		begin //Para sincronizar con el pixy evitar indeseados erroes
-			if(pixel_tick && ce)
+			if(pixel_tick)
 				begin
 					text_rgb = 3'b000;  // fonodo negro
-					if (state_on) //Si esta el estado encima
+					if (state_on && ~ceSS) //Si esta el estado encima
 						begin
 							char_addr = char_addr_st;
 							row_addr = row_addr_st;
@@ -416,6 +450,16 @@ module TicTacToeTextPainter
 							else
 								text_rgb = BLACK;
 						end
+					else if(playing_on_ss && ceSS)
+					begin
+						char_addr = char_addr_ss;
+						row_addr = row_addr_ss;
+						bit_addr = bit_addr_ss;
+						if(font_bit)
+							text_rgb = GREEN;
+						else
+							text_rgb = BLACK;
+					end
 					else if (bar_right_on || bar_left_on || bar_up_on || bar_down_on) //Si la barra vertical derecha se encuentra encima
 						text_rgb = LIGHTBLUE; 
 					else if ((restart_underline_on && ~posButton) || (score_underline_on && posButton))  //Si la barra horizontal abajo se encuentra encima
@@ -464,7 +508,7 @@ module TicTacToeTextPainter
 	
 
 
-   assign text_on = {xo8_on, mouse_on, xo7_on, xo6_on,xo5_on,xo4_on, xo3_on,xo2_on,xo1_on, xo0_on,
+   assign text_on = {playing_on_ss, xo8_on, mouse_on, xo7_on, xo6_on,xo5_on,xo4_on, xo3_on,xo2_on,xo1_on, xo0_on,
 								score_underline_on, restart_underline_on,erase_on, restart_on, bar_left_on,
 								bar_right_on, bar_up_on, bar_down_on, state_on};
    //-------------------------------------------

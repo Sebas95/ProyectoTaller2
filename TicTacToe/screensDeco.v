@@ -35,13 +35,8 @@ module screensDeco(
 	reg [2:0] rgbAux = 0;
 	reg  [10:0] rom_addr_Aux = 0;
 	
-	 always @*
-		if(ceSS)		
-			begin
-				rgbAux = rgbSS;
-				rom_addr_Aux = rom_addr_SS;
-			end
-		else if (cePS)
+	 always @*		
+		if (cePS || ceSS)
 			begin
 				rom_addr_Aux = rom_addr_PS;
 				rgbAux = rgbPS;
