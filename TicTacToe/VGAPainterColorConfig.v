@@ -24,7 +24,9 @@ module VGAPainterColorConfig(
 	input wire left,
 	input wire right,
 	input wire cePS,
-	input wire ceWS,
+	input wire ceWSX,
+	input wire ceWSO,
+	input wire ceT,
 	input wire ceSS,	
 	input wire clk_100MHz,
 	input wire [8:0] xm, ym,	
@@ -58,7 +60,7 @@ module VGAPainterColorConfig(
 		.up(up),
 		.down(down),
 		.cePS(cePS),
-		.ceWS(ceWS),
+		.ceWSX(ceWSX),
 		.ceSS(ceSS)		
 	);	
 	

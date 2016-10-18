@@ -38,15 +38,43 @@ module TicTacToe(
 	wire [8:0] xm;
 	wire [8:0] ym;
 	
-	reg  cePS = 0;
-	reg  ceSS = 1;
-	reg  ceWS = 0;
+	// playing
+	wire cePlayingScreen = (~ceStartScreen & ~ceWinnerXSreen & ~ceWinnerOSreen & ~ceTieSreen ); 
+	wire ceStartScreen; // start playing
+	wire ceWinnerXSreen; //winner X
+	wire ceWinnerOSreen; //winner O
+	wire ceTieSreen; //Empate
 
    mouse mouse_unit
       (.clk(clk_50MHz), .reset(reset), .ps2d(ps2d), .ps2c(ps2c),
        .xm(xm), .ym(ym), .btnm(btnm),
        .m_done_tick(m_done_tick));
 		 
+	FinitStateMachine finit_state_machine(
+		//in
+		.clk_100MHz(CLK_100MHZ), 
+		.reset(), //not implemented yet     
+		.cuadro(),
+		.erase(),
+		.restart(),  
+		.randomClick(),
+		//out
+		.x(),
+		.o(),
+		.resetScore(),
+		.inc_x_score(),
+		.inc_o_score(),
+		.displayStartPlaying(ceStartScreen),
+		.displayGanadorX(ceWinnerXSreen),
+		.displayGanadorO(ceWinnerOSreen),
+		.displayEmpate(ceTieSreen),
+		.turnoX(),
+		.state()
+		
+    );
+	 
+   
+		
    VGAPainterColorConfig VGAPCC (
 	.up(up),
 	.down(down),
@@ -58,9 +86,11 @@ module TicTacToe(
    .rgb(rgb),
 	.xm(xm),
 	.ym(ym),
-	.cePS(cePS),
-	.ceWS(ceWS),
-	.ceSS(ceSS)
+	.cePS(cePlayingScreen),
+	.ceWSX(ceWinnerXSreen),
+	.ceWSO(ceWinnerOSreen),
+	.ceT(ceTieSreen),
+	.ceSS(ceStartScreen),
 	);
 
 endmodule
