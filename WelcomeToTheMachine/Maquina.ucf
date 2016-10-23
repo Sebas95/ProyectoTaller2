@@ -1,0 +1,26 @@
+NET "CLK_100MHZ" LOC = V10;
+
+NET "cuadro[0]" LOC = T5;
+NET "cuadro[1]" LOC = V8;
+NET "cuadro[2]" LOC = U8;
+NET "cuadro[3]" LOC = N8;
+NET "cuadro[4]" LOC = M8;
+NET "cuadro[5]" LOC = V9;
+NET "cuadro[6]" LOC = T9;
+NET "cuadro[7]" LOC = T10;
+NET "cuadro[8]" LOC = C4; 
+NET "restart" LOC = C9;       
+NET "erase" LOC = D9;
+NET "randomClick" LOC = A8 ;
+
+
+
+
+NET "displayGanadorX" LOC = V16;
+NET "displayGanadorO" LOC = U16;
+NET "turnoX" LOC = U15;
+
+NET "state[0]" LOC = M11; 
+NET "state[1]" LOC = N11;
+NET "state[2]" LOC = R11;
+NET "state[3]" LOC = T11;

@@ -73,3 +73,6 @@ TicTacToe/TicTacToe_bitgen.xwbt
 *.bgn
 *.ngr
 *.ngr
+*.xwbt
+*.sym
+*.bit
