@@ -96,10 +96,12 @@ module TicTacToe(
 	 
 	 
    ScoreCounter scoreCounter(
+	 .clk(CLK_100MHZ),
     .incrementX(up),
     .incrementO(down),
     .scoreX(scoreX),
-    .scoreO(scoreO)
+    .scoreO(scoreO),
+	 .reset(left)
     );	 
 		 
 	FinitStateMachine finit_state_machine(
