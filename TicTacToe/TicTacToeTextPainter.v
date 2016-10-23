@@ -8,11 +8,19 @@ module TicTacToeTextPainter
     input wire  clk, 
 	 input wire  clk1Hz, 
 	 input wire ceSS,
-    input wire  [9:0] pix_x, pix_y,
+    input wire [9:0] pix_x, pix_y,
 	 input wire [7:0] font_word,
 	 input wire pixel_tick,	 
 	 input wire [9:0] xm, ym,
 	 input wire ce,
+    input wire [8:0] x_matrix,
+    input wire [8:0] o_matrix,	 
+	 input wire [3:0] digX0,
+	 input wire [3:0] digX1,
+	 input wire [3:0] digO0,
+	 input wire [3:0] digO1,
+	 input wire turnoX,
+	 input wire turnoO,
     output wire [31:0] text_on,
     output reg  [2:0] text_rgb =0,
 	 output wire [10:0] rom_addr
@@ -218,10 +226,66 @@ module TicTacToeTextPainter
 	assign xo6_on = (pix_y[9:6]== X_O_LOCATION + 2*X_O_SEPARATION ) && (pix_x[9:5]==6);
 	assign xo7_on = (pix_y[9:6]== X_O_LOCATION + 2*X_O_SEPARATION ) && (pix_x[9:5]==8);
 	assign xo8_on = (pix_y[9:6]== X_O_LOCATION + 2*X_O_SEPARATION ) && (pix_x[9:5]==10);
+	
+	//Decido si pintar X o Y
    always @*
-	begin
-		char_addr_xo1 = 7'h58;
-	end		
+		begin
+			char_addr_xo1 = 7'h0;
+			//CUADRO ARRIBA IZQUIERDA
+			if(xo0_on)
+				if(x_matrix[0])
+					char_addr_xo1 = 7'h58;
+				else if(o_matrix[0])
+					char_addr_xo1 = 7'h4f;			
+			//CUADRO ARRIBA CENTRO
+			if(xo1_on)
+				if(x_matrix[1])
+					char_addr_xo1 = 7'h58;
+				else if(o_matrix[1])
+					char_addr_xo1 = 7'h4f;	
+			//CUADRO ARRIBA DERECHA				
+			if(xo2_on)
+				if(x_matrix[2])
+					char_addr_xo1 = 7'h58;
+				else if(o_matrix[2])
+					char_addr_xo1 = 7'h4f;	
+			//CUADRO ARRIBA IZQUIERDA				
+			if(xo3_on)
+				if(x_matrix[3])
+					char_addr_xo1 = 7'h58;
+				else if(o_matrix[3])
+					char_addr_xo1 = 7'h4f;	
+			//CUADRO ARRIBA CENTRO				
+			if(xo4_on)
+				if(x_matrix[4])
+					char_addr_xo1 = 7'h58;
+				else if(o_matrix[4])
+					char_addr_xo1 = 7'h4f;	
+			//CUADRO ARRIBA DERECHA				
+			if(xo5_on)
+				if(x_matrix[5])
+					char_addr_xo1 = 7'h58;
+				else if(o_matrix[5])
+					char_addr_xo1 = 7'h4f;	
+			//CUADRO ARRIBA IZQUIERDA				
+			if(xo6_on)
+				if(x_matrix[6])
+					char_addr_xo1 = 7'h58;
+				else if(o_matrix[6])
+					char_addr_xo1 = 7'h4f;	
+			//CUADRO ARRIBA CENTRO				
+			if(xo7_on)
+				if(x_matrix[7])
+					char_addr_xo1 = 7'h58;
+				else if(o_matrix[7])
+					char_addr_xo1 = 7'h4f;	
+			//CUADRO ARRIBA DERECHA				
+			if(xo8_on)
+				if(x_matrix[8])
+					char_addr_xo1 = 7'h58;
+				else if(o_matrix[8])
+					char_addr_xo1 = 7'h4f;		
+		end		
 		
    //-------------------------------------------
    // Titulo
@@ -236,17 +300,22 @@ module TicTacToeTextPainter
 		char_addr_st = 7'h00;
 		begin				
 			case (pix_x[8:5])
-				4'h0: char_addr_st = 7'h54; // T
-				4'h1: char_addr_st = 7'h69; // i
-				4'h2: char_addr_st = 7'h63; // c
-				4'h3: char_addr_st = 7'h00; // 
-				4'h4: char_addr_st = 7'h54; // T
-				4'h5: char_addr_st = 7'h61; // a
-				4'h6: char_addr_st = 7'h63; // c
-				4'h7: char_addr_st = 7'h00; // 
-				4'h8: char_addr_st = 7'h54; // T
-				4'h9: char_addr_st = 7'h6f; // o
-				4'ha: char_addr_st = 7'h65; // e
+				4'h0: char_addr_st = 7'h58; // X	
+				4'h1: char_addr_st = 7'h3a; // :		
+				4'h2: char_addr_st = {3'b011,digX0}; //Aqui escojo segun el digito entrante el que coloco en pantalla
+				4'h3: char_addr_st = {3'b011,digX1}; //Aqui escojo segun el digito entrante el que coloco en pantalla		
+				4'h4: char_addr_st = 7'h00; // 
+				4'h5: char_addr_st = 7'h4f; // O			
+				4'h6: char_addr_st = 7'h3a; // :
+				4'h7: char_addr_st = {3'b011,digO0}; //Aqui escojo segun el digito entrante el que coloco en pantalla
+				4'h8: char_addr_st = {3'b011,digO1}; //Aqui escojo segun el digito entrante el que coloco en pantalla
+				4'h9: char_addr_st = 7'h00; //
+				4'ha: char_addr_st = 7'h54; //T
+				4'hb: char_addr_st = 7'h75; //u
+				4'hc: char_addr_st = 7'h72; //r
+				4'hd: char_addr_st = 7'h6e; //n
+				4'he: char_addr_st = 7'h3a; //:
+				4'hf: char_addr_st = (turnoX) ? 7'h58: (turnoO) ? 7'h4f : 7'h01; //
 				default : char_addr_st = 7'h00;
 			endcase			
 		end
@@ -265,19 +334,6 @@ module TicTacToeTextPainter
 		char_addr_rt = 7'h00;
 		begin				
 			case (pix_x[7:4])
-				/*4'h0: char_addr_rt = 7'h52; // R
-				4'h1: char_addr_rt = 7'h65; // e
-				4'h2: char_addr_rt = 7'h73; // s
-				4'h3: char_addr_rt = 7'h74; // t
-				4'h4: char_addr_rt = 7'h61; // a
-				4'h5: char_addr_rt = 7'h72; // r
-				4'h6: char_addr_rt = 7'h74; // t
-				4'h7: char_addr_rt = 7'h00; // 
-				4'h8: char_addr_rt = 7'h4d; // M
-				4'h9: char_addr_rt = 7'h61; // a
-				4'ha: char_addr_rt = 7'h74; // t
-				4'hb: char_addr_rt = 7'h63; // c
-				4'hc: char_addr_rt = 7'h68; // h*/
 				
 				4'h0: char_addr_rt = 7'h4d; // M
 				4'h1: char_addr_rt = 7'h61; // a
@@ -313,19 +369,6 @@ module TicTacToeTextPainter
 		char_addr_e = 7'h00;
 		begin				
 			case (pix_x[7:4])
-				/*4'h0: char_addr_rt = 7'h52; // R
-				4'h1: char_addr_rt = 7'h65; // e
-				4'h2: char_addr_rt = 7'h73; // s
-				4'h3: char_addr_rt = 7'h74; // t
-				4'h4: char_addr_rt = 7'h61; // a
-				4'h5: char_addr_rt = 7'h72; // r
-				4'h6: char_addr_rt = 7'h74; // t
-				4'h7: char_addr_rt = 7'h00; // 
-				4'h8: char_addr_rt = 7'h4d; // M
-				4'h9: char_addr_rt = 7'h61; // a
-				4'ha: char_addr_rt = 7'h74; // t
-				4'hb: char_addr_rt = 7'h63; // c
-				4'hc: char_addr_rt = 7'h68; // h*/
 				
 				4'h0: char_addr_e = 7'h65; // e
 				4'h1: char_addr_e = 7'h00; // 
@@ -403,10 +446,7 @@ module TicTacToeTextPainter
 							row_addr = row_addr_st;
 							bit_addr = bit_addr_st;
 							if (font_bit)
-								if(pix_x > 100 && pix_x < 230)
-									text_rgb = BLUE;	
-								else
-									text_rgb = LIGHTBLUE;	
+								text_rgb = LIGHTBLUE;	
 							else
 								text_rgb = BLACK;
 						end
@@ -460,7 +500,8 @@ module TicTacToeTextPainter
 							text_rgb = BLUE;
 						else
 							text_rgb = BLACK;
-				end
+				end			
+				
 		end
 	
 

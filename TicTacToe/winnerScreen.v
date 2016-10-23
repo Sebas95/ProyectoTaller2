@@ -23,6 +23,9 @@ module winnerScreen(
     input wire  [9:0] pix_x, pix_y,
 	 input wire  [7:0] font_word,
 	 input wire  pixel_tick,	 
+	 input wire ganadorX,
+	 input wire ganadorO,
+	 input wire tie,
     output wire [2:0] text_on_winner,
     output reg  [2:0] text_rgb =0,
 	 output wire [10:0] rom_addr
@@ -32,7 +35,7 @@ module winnerScreen(
 	
 	//Declaration of the column of the characters
 	
-   reg  [6:0] char_addr=0, char_addr_title=0, char_addr_xo=0;
+   reg  [6:0] char_addr=0, char_addr_title=0, char_addr_xo=0,char_addr_tie=0;
 	
    wire  [3:0] row_addr; 
 	
@@ -72,9 +75,10 @@ module winnerScreen(
 				4'h6: char_addr_title = 7'h6e; // n
 				4'h7: char_addr_title = 7'h65; // e
 				4'h8: char_addr_title = 7'h72; // r
-				4'h9: char_addr_title = 7'h00; // 
+				4'h9: char_addr_title = 7'h3a; // :
 				4'ha: char_addr_title = 7'h00; // 
-				4'hb: char_addr_title = 7'h00; // 
+				4'hb: char_addr_title = (ganadorX) ? 7'h58 :
+												(ganadorO) ? 7'h4f : 7'h00;// 
 				4'hc: char_addr_title = 7'h00; // 
 				4'hd: char_addr_title = 7'h00; // 
 				4'he: char_addr_title = 7'h00; // 
@@ -83,18 +87,32 @@ module winnerScreen(
 			endcase			
 		end
 	end
-
-//-------------------------------------------
-// Ganador
-//  - Despliega el ganador X ó O 
-//  - Escala  32-64 
-//-------------------------------------------	
-
-	assign xo_on = (pix_y[9:6]== 3) && (pix_x[9:5]==7);
+	
+//Empate
+	
    always @*
-	begin
-		char_addr_xo = 7'h58;
-	end		
+	begin		
+		char_addr_tie = 7'h00;
+		begin				
+			case (pix_x[8:5])
+				4'h3: char_addr_tie = 7'h54; // T
+				4'h4: char_addr_tie = 7'h69; // i
+				4'h5: char_addr_tie = 7'h65; // e
+				4'h6: char_addr_tie = 7'h00; // 
+				4'h7: char_addr_tie = 7'h00; //
+				4'h8: char_addr_tie = 7'h00; // 
+				4'h9: char_addr_tie = 7'h00; // 
+				4'ha: char_addr_tie = 7'h00; // 
+				4'hb: char_addr_tie = 7'h00; //
+				4'hc: char_addr_tie = 7'h00; // 
+				4'hd: char_addr_tie = 7'h00; // 
+				4'he: char_addr_tie = 7'h00; // 
+				4'hf: char_addr_tie = 7'h00; // 
+				default : char_addr_tie = 7'h00;
+			endcase			
+		end
+	end	
+
 
 	
 //-------------------------------------------
@@ -102,25 +120,28 @@ module winnerScreen(
 //-------------------------------------------
    always @*
 		begin //Para sincronizar con el pix_y evitar indeseados erroes
-			if(pixel_tick && ce)
+			if(pixel_tick)
 				begin
 					text_rgb = 3'b000;  // fondo negro
 					if (winner_title_on) //Si esta el estado encima
 					begin
-						char_addr = char_addr_title;
-						if(font_bit)
-							text_rgb = GREEN;
-						else
-							text_rgb = BLACK;
+						if(tie)
+							begin
+								char_addr = char_addr_tie;
+								if(font_bit)
+									text_rgb = GREEN;
+								else
+									text_rgb = BLACK;
+							end
+						if(ganadorO || ganadorX)
+							begin
+								char_addr = char_addr_title;
+								if(font_bit)
+									text_rgb = GREEN;
+								else
+									text_rgb = BLACK;
+							end
 					end
-					else if (xo_on)
-						begin
-							char_addr = char_addr_xo;
-							if(font_bit)
-								text_rgb = WHITE;
-							else
-								text_rgb = BLACK;					
-						end
 					else
 						text_rgb = BLACK;
 				end
@@ -128,7 +149,7 @@ module winnerScreen(
 	
 
 
-   assign text_on_winner = {1'b0,winner_title_on, xo_on};
+   assign text_on_winner = {1'b0,winner_title_on,1'b0};
    //-------------------------------------------
    // Direccion de la rom para escoger el numero deseado
    //-------------------------------------------

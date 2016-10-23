@@ -46,10 +46,20 @@ module VgaPainter(
 	input wire clk_100MHz,
 	input wire [9:0] xm, ym,
 	input wire cePS,
-	input wire ceWSX,
 	input wire ceSS,
-   output wire hsync, vsync,
-   output wire [2:0] rgb,
+	input wire [8:0] x_matrix,
+	input wire [8:0] o_matrix,
+	input wire [3:0] digX0,
+	input wire [3:0] digX1,
+	input wire [3:0] digO0,
+	input wire [3:0] digO1,	
+	input wire ganadorX,
+	input wire ganadorO,	
+	input wire tie,
+	 input wire turnoX,
+	 input wire turnoO,	
+	output wire hsync, vsync,
+	output wire [2:0] rgb,
 	output wire video_on,
 	output wire [31:0] text_on,
 	output wire text_on_start,
@@ -74,7 +84,7 @@ module VgaPainter(
 	always @(posedge clk_100MHz)
 		clk_50MHz<= ~clk_50MHz;
 
-
+	wire ceWS = ganadorO || ganadorX || tie;
 
 	//Instanciación de la memoria de las configuraciones
    font_rom font_unit
@@ -93,6 +103,9 @@ module VgaPainter(
 	);
 	
    // instanciacion para desplegar el texto
+	
+
+	
    TicTacToeTextPainter text_unit
       (
 		 .up(up),
@@ -111,7 +124,15 @@ module VgaPainter(
 		 .xm(xm),
 		 .ym(ym),
 		 .ce(cePS),
-		 .ceSS(ceSS)
+		 .ceSS(ceSS),
+		 .x_matrix(x_matrix),
+		 .o_matrix(o_matrix),
+		 .digX0(digX0),
+		 .digX1(digX1),
+		 .digO0(digO0),
+		 .digO1(digO1),
+		 .turnoX(turnoX),
+		 .turnoO(turnoO)
 	);
 	
 	//Pantalla de inicio
@@ -130,13 +151,16 @@ module VgaPainter(
 	
 	winnerScreen wS
    (
-	 .ce(ceWS),
+	 .ce(ceWS),	 
     .pix_x(pixel_x), .pix_y(pixel_y),
 	 .font_word(font_word),
 	 .pixel_tick(pixel_tick),	 
     .text_on_winner(text_on_winner),
     .text_rgb(rgbWS),
-	 .rom_addr(rom_addr_WS)
+	 .rom_addr(rom_addr_WS),
+	 .ganadorX(ganadorX),
+	 .ganadorO(ganadorO),
+	 .tie(tie)
    );
 	
 	//Divisor de frecuencia de 1HZ
@@ -148,7 +172,7 @@ module VgaPainter(
 	);
 	
 	screensDeco wD(
-	.ceWS(ceWSX),
+	.ceWS(1),
 	.cePS(cePS),
 	.ceSS(ceSS),
 	.rgbWS(rgbWS),
