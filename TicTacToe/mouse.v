@@ -99,8 +99,6 @@ module mouse
                end
          done:
             begin
-					x_next[8:0] = 0;
-					y_next[8:0] = 0;
                m_done_tick = 1'b1;
                state_next = pack1;
             end

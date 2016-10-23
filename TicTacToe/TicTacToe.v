@@ -28,16 +28,17 @@ module TicTacToe(
 	inout wire ps2d, ps2c,
 	output wire hsync, vsync,
    output wire [2:0] rgb,
-	output wire m_done_tick
+	output wire [9:0] xm,
+	output wire [8:0] clickedMatrix,
+	output wire [2:0] btn
     );
 	 
 	reg clk_50MHz = 0;
 	always @(posedge CLK_100MHZ)
 		clk_50MHz = ~clk_50MHz;
 	
-	wire [8:0] xm;
+	//wire [8:0] xm;
 	wire [8:0] ym;
-	
 	// playing
 	wire cePlayingScreen = (~ceStartScreen & ~ceWinnerXSreen & ~ceWinnerOSreen & ~ceTieSreen ); 
 	wire ceStartScreen; // start playing
@@ -45,10 +46,21 @@ module TicTacToe(
 	wire ceWinnerOSreen; //winner O
 	wire ceTieSreen; //Empate
 
-   mouse mouse_unit
+   /*mouse mouse_unit
       (.clk(clk_50MHz), .reset(reset), .ps2d(ps2d), .ps2c(ps2c),
        .xm(xm), .ym(ym), .btnm(btnm),
-       .m_done_tick(m_done_tick));
+       .m_done_tick(m_done_tick));*/
+		 
+   mouseController mouseC
+      (.clk(clk_50MHz), .reset(reset), .ps2d(ps2d), .ps2c(ps2c),
+       .posX(xm), .posY(ym), .buttons(btn));
+		 
+	clickedSquare clickedSquareInst
+	 (.clicked(btn),
+    .Xlocation(xm),
+    .Ylocation(ym),
+	 .clickedMatrix(clickedMatrix)
+    );
 		 
 	FinitStateMachine finit_state_machine(
 		//in

@@ -44,7 +44,7 @@ module VgaPainter(
 	input	wire up,
 	input	wire down,	
 	input wire clk_100MHz,
-	input wire [8:0] xm, ym,
+	input wire [9:0] xm, ym,
 	input wire cePS,
 	input wire ceWSX,
 	input wire ceSS,

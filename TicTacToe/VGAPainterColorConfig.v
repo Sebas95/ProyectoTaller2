@@ -29,7 +29,7 @@ module VGAPainterColorConfig(
 	input wire ceT,
 	input wire ceSS,	
 	input wire clk_100MHz,
-	input wire [8:0] xm, ym,	
+	input wire [9:0] xm, ym,	
    output wire hsync, vsync,
    output wire [2:0] rgb	
 	);

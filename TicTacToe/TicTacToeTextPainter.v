@@ -11,7 +11,7 @@ module TicTacToeTextPainter
     input wire  [9:0] pix_x, pix_y,
 	 input wire [7:0] font_word,
 	 input wire pixel_tick,	 
-	 input wire [8:0] xm, ym,
+	 input wire [9:0] xm, ym,
 	 input wire ce,
     output wire [31:0] text_on,
     output reg  [2:0] text_rgb =0,
@@ -164,53 +164,9 @@ module TicTacToeTextPainter
 								 (pix_x < 526);
 								 
 	assign refr_tick = (pix_y==481) && (pix_x==0);
-	reg [9:0] mouse_xAux = 50;
-	reg [9:0] mouse_yAux = 50;
-	
-	always @(posedge clk)
-		begin
-			mouse_x <= mouse_xAux;
-			mouse_y <= mouse_yAux;
-		end
-	
-	always@*
-		begin
-			/*if(refr_tick && xm[8] && (xm > 0))	
-				begin
-					mouse_xAux <= mouse_x - 2;					
-				end
-			else if(refr_tick && ~xm[8] && (xm > 0))	
-				begin
-					mouse_xAux <= mouse_x + 4;					
-				end		
-			if(refr_tick && ym[8] && (ym > 0))	
-				begin
-					mouse_yAux <= mouse_y - 2;
-				end
-			else if(refr_tick && ~ym[8] && (ym > 0))	
-				begin
-					mouse_yAux <= mouse_y + 4;
-				end*/
-			if(refr_tick && left)
-				mouse_xAux <= mouse_x - 2;	
-			else if(refr_tick && right)
-				mouse_xAux <= mouse_x + 2;		
-			else if(refr_tick && up)
-				mouse_yAux <= mouse_y - 2;	
-			else if(refr_tick && down)
-				mouse_yAux <= mouse_y + 2;					
-			else
-				begin
-					mouse_xAux <= mouse_x;
-					mouse_yAux <= mouse_y;
-				end
-		end
-	
-	assign mouse_x_coor = mouse_x ;
-	assign mouse_y_coor = mouse_y ;
 								 
-	assign mouse_on = (pix_x > mouse_x_coor) && (pix_x <mouse_x_coor + 15) && 
-							(pix_y > mouse_y_coor) && (pix_y <mouse_y_coor + 15);					
+	assign mouse_on = (pix_x > xm) && (pix_x <xm + 5) && 
+							(pix_y > ym) && (pix_y <ym + 5);					
 
    //-------------------------------------------
    // Temporizador
@@ -437,7 +393,11 @@ module TicTacToeTextPainter
 			if(pixel_tick)
 				begin
 					text_rgb = 3'b000;  // fonodo negro
-					if (state_on && ~ceSS) //Si esta el estado encima
+					if(mouse_on)
+						begin
+							text_rgb = GREEN;
+						end					
+					else if (state_on && ~ceSS) //Si esta el estado encima
 						begin
 							char_addr = char_addr_st;
 							row_addr = row_addr_st;
@@ -474,10 +434,7 @@ module TicTacToeTextPainter
 							else 
 								text_rgb = BLACK;	
 						end
-					else if(mouse_on)
-						begin
-							text_rgb = GREEN;
-						end						
+						
 					else if (restart_on)   //Si el label de restar está encima 
 						begin
 							char_addr = char_addr_rt;

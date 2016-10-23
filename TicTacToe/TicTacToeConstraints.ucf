@@ -29,6 +29,18 @@ NET "right" LOC = D9;
 NET "ps2d" LOC= K14 | PULLUP;
 NET "ps2c" LOC= L13 | PULLUP;
 
-NET "m_done_tick" LOC = U16;
+
+NET "clickedMatrix[8]" LOC = T11;
+NET "clickedMatrix[6]" LOC = R11;
+NET "clickedMatrix[5]" LOC = N11;
+NET "clickedMatrix[4]" LOC = M11;
+NET "clickedMatrix[3]" LOC = V15;
+NET "clickedMatrix[2]" LOC = U15;
+NET "clickedMatrix[1]" LOC = V16;
+NET "clickedMatrix[0]" LOC = U16;
+
+//NET "btn[0]" LOC = U16;
+
+
 
 
