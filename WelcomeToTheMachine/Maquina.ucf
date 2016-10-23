@@ -16,11 +16,16 @@ NET "randomClick" LOC = A8 ;
 
 
 
-NET "displayGanadorX" LOC = V16;
-NET "displayGanadorO" LOC = U16;
-NET "turnoX" LOC = U15;
+NET "displayGanadorX" LOC = T11;
+NET "displayGanadorO" LOC = R11;
+NET "resetScore" LOC = N11;
+NET "inc_x_score" LOC = M11;
+NET "inc_o_score" LOC = V15;
+NET "displayStartPlaying" LOC = U15;
+NET "displayEmpate" LOC = V16;
+NET "turnoX" LOC = U16;
 
-NET "state[0]" LOC = M11; 
-NET "state[1]" LOC = N11;
-NET "state[2]" LOC = R11;
-NET "state[3]" LOC = T11;
+//NET "state[0]" LOC = M11; 
+//NET "state[1]" LOC = N11;
+//NET "state[2]" LOC = R11;
+//NET "state[3]" LOC = T11;

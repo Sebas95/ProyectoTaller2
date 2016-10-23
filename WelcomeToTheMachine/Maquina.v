@@ -36,19 +36,19 @@ module Maquina(
 	
 	
 
-	wire reloj;
+	//wire reloj;
 	wire [8:0]entradas;
 	wire gnd=0;
 	wire resetPosiciones;
 	wire [8:0]guardar_x;
 	wire [8:0]guardar_o;
 	
-	FrecuencyDivider fd(
+	/*FrecuencyDivider fd(
 		.clk_100MHz(clk_100MHz),
 		.clk_1Hz(reloj),
 		.counter()
 		
-		);
+		);*/
 	 
 	TotalDebouncer tdb(
 		.sw(cuadro),
@@ -59,8 +59,8 @@ module Maquina(
 	 
 	 
 	 EnigmaMachine fsm(
-		//.clk_100MHz(clk_100MHz), 
-		.clk_100MHz(reloj),   
+		.clk_100MHz(clk_100MHz), 
+		//.clk_100MHz(reloj),   
 		//.cuadro(cuadro),
 		.cuadro(entradas),
 		.erase(erase),
@@ -84,16 +84,16 @@ module Maquina(
 		
     );
 	 Tablero registro_x(
-		//.clk(clk_100MHz),
-		.clk(reloj),
+		.clk(clk_100MHz),
+		//.clk(reloj),
 		.reset(resetPosiciones),
 		.cuadros(guardar_x),
 		.posiciones(x)		
 	 );
 	 
 	 Tablero registro_o(
-		//.clk(clk_100MHz),
-		.clk(reloj),
+		.clk(clk_100MHz),
+		//.clk(reloj),
 		.reset(resetPosiciones),
 		.cuadros(guardar_o),
 		.posiciones(o)		
