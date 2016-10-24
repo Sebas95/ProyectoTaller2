@@ -112,7 +112,7 @@ module TicTacToe(
 		.cuadro(clickedMatrix),
 		.erase(rightDebounced),
 		.restart(leftDebounced),  
-		.randomClick(btn[0]), //cualquier click
+		.randomClick(btn[1]), //cualquier click
 		//out
 		.x(x_matrix),
 		.o(o_matrix),
