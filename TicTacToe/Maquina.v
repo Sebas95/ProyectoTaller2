@@ -71,7 +71,7 @@ module Maquina(
 		.clk(clk_100MHz),
 		.reset(resetPosiciones),
 		.cuadros(guardar_x),
-		.posiciones(x)		 
+		.posiciones(x)		
 	 );
 	 
 	 Tablero registro_o(
