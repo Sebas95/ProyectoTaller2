@@ -80,65 +80,25 @@ module EnigmaMachine(
 		case (state)
 			inicio:
 			begin
-				resetPosiciones<=1;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=1;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX <= 1;
-				
 				if(click)	nextState<=verposicion_x;
 				else			nextState<=inicio;
 			end
-
 			verposicion_x: //-------------------------------------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX<=1;
-				
-					  if(cuadro[0] & ~x[0] & ~o[0] )	nextState<=asignar_x;
-						
-				else if(cuadro[1] &  ~x[1] & ~o[1] )		nextState<=asignar_x;			
-						
-				else if(cuadro[2] & ~x[2] & ~o[2]  )	nextState<=asignar_x;					
-				
-				else if(cuadro[3] & ~x[3] & ~o[3] )		nextState<=asignar_x;					
-						
-				else if(cuadro[4] & ~x[4] & ~o[4] )		nextState<=asignar_x;			
-				
-				else if(cuadro[5] & ~x[5] & ~o[5] )		nextState<=asignar_x;
-					
-				else if(cuadro[6] & ~x[6] & ~o[6] )		nextState<=asignar_x;			
-								
-				else if(cuadro[7] & ~x[7] & ~o[7] )		nextState<=asignar_x;
-								
+				if(cuadro[0] & ~x[0] & ~o[0] )	nextState<=asignar_x;	
+				else if(cuadro[1] &  ~x[1] & ~o[1] )		nextState<=asignar_x;								
+				else if(cuadro[2] & ~x[2] & ~o[2]  )	nextState<=asignar_x;								
+				else if(cuadro[3] & ~x[3] & ~o[3] )		nextState<=asignar_x;									
+				else if(cuadro[4] & ~x[4] & ~o[4] )		nextState<=asignar_x;					
+				else if(cuadro[5] & ~x[5] & ~o[5] )		nextState<=asignar_x;			
+				else if(cuadro[6] & ~x[6] & ~o[6] )		nextState<=asignar_x;								
+				else if(cuadro[7] & ~x[7] & ~o[7] )		nextState<=asignar_x;					
 				else if(cuadro[8] & ~x[8] & ~o[8] )		nextState<=asignar_x;
-			
 				else 	nextState<= retorno;
 			end
 			verposicion_o: //-------------------------------------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX<=0;
 				
-					
 					  if(cuadro[0] & ~x[0] & ~o[0] ) nextState<=asignar_o;			
 				else if(cuadro[1] & ~x[1] & ~o[1] )	nextState<=asignar_o;					
 				else if(cuadro[2] & ~x[2] & ~o[2] )	nextState<=asignar_o;			
@@ -152,46 +112,15 @@ module EnigmaMachine(
 			end
 			asignar_x://--------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX<=1;
-		
 				nextState<=revisar_ganador_X;
-			
 			end
 			asignar_o://--------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX<=0;
-				
-				
 				nextState<=revisar_ganador_O;
-			
 			end
 			revisar_ganador_O://--------2------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX <= 0;
+
 				if(GanoO)			nextState<=ganador_o;
 				else if(Empate)	nextState<=empatando;
 				else if(~click)	nextState<=retorno;
@@ -200,15 +129,6 @@ module EnigmaMachine(
 			end
 			revisar_ganador_X://---------3-----------
 			begin		
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX <= 1;
 				if(GanoX)			nextState<=ganador_x;
 				else if(Empate)	nextState<=empatando;
 				else if(~click)	nextState<=retorno2;
@@ -216,15 +136,7 @@ module EnigmaMachine(
 			end
 				retorno: //-----------6------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX <= 1;
+
 				if(click)
 					nextState<=verposicion_x;
 				else if(erase)
@@ -236,15 +148,7 @@ module EnigmaMachine(
 			end
 			retorno2: //-----------7------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX <= 0;
+
 				if(click)
 					nextState<=verposicion_o;
 				else if(erase)
@@ -256,89 +160,38 @@ module EnigmaMachine(
 			end
 			ganador_x://--------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=1;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=1;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX <= 0;
+
 				if(randomClick)	nextState<=inicio;
 				else					nextState<=ganador_x;
 			end
 			ganador_o://--------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=1;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=1;
-				displayEmpate<=0;
-				turnoX <= 0;
+
 				if(randomClick)	nextState<=inicio;
 				else					nextState<=ganador_o;
 			end
 			empatando://--------------------
 			begin
-				resetPosiciones<=1;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=1;
-				turnoX<=1;
+
 				
 				if(randomClick)	nextState<=inicio;
 				else					nextState<=empatando;
 			end
 			r://------------------------------------
 			begin
-				resetPosiciones<=1;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX <= 1;
-				
+
 				nextState<= inicio;
 				
 			end
 			e://------------------------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=1;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX<=1;
-			
+
 				nextState<=retorno;		
 			end
 		
 			default://------------------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=0;
-				inc_x_score<=0;
-				inc_o_score<=0;
-				displayStartPlaying<=0;
-				displayGanadorX<=0;
-				displayGanadorO<=0;
-				displayEmpate<=0;
-				turnoX<=1;
-				
+
 				nextState<=inicio;
 			end
 				
@@ -359,22 +212,62 @@ always@(cuadro,restart,randomClick,click,Empate,GanoX,GanoO,turnoX,x,o,state,era
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
+				resetPosiciones<=1;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=1;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX <= 1;
+				
 			end
 
 			verposicion_x: //-------------------------------------------------
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX<=1;
+				
 		
 			end
 			verposicion_o: //-------------------------------------------------
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX<=0;
+				
+					
 		
 			end
 			asignar_x://--------------------
 			begin
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX<=1;
 				almacenar_o<= 9'b000000000;	
 				if(cuadro[0])			almacenar_x<= 9'b000000001;
 				else if(cuadro[1]) 	almacenar_x<= 9'b000000010;
@@ -387,9 +280,19 @@ always@(cuadro,restart,randomClick,click,Empate,GanoX,GanoO,turnoX,x,o,state,era
 				else if(cuadro[8])	almacenar_x<= 9'b100000000;
 				else                 almacenar_x<= 9'b000000000;	
 				
+				
 			end
 			asignar_o://--------------------
 			begin
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX<=0;
 				almacenar_x<= 9'b000000000;	
 				if(cuadro[0])			almacenar_o<= 9'b000000001;
 				else if(cuadro[1]) 	almacenar_o<= 9'b000000010;
@@ -406,7 +309,15 @@ always@(cuadro,restart,randomClick,click,Empate,GanoX,GanoO,turnoX,x,o,state,era
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
-
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX <= 0;
 				
 			
 			end
@@ -414,7 +325,15 @@ always@(cuadro,restart,randomClick,click,Empate,GanoX,GanoO,turnoX,x,o,state,era
 			begin	
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
-
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX <= 1;
 				
 			end
 			
@@ -422,13 +341,30 @@ always@(cuadro,restart,randomClick,click,Empate,GanoX,GanoO,turnoX,x,o,state,era
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
-
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=1;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=1;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX <= 0;
 				
 			end
 			ganador_o://--------------------
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=1;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=1;
+				displayEmpate<=0;
+				turnoX <= 0;
 
 				
 			end
@@ -436,14 +372,31 @@ always@(cuadro,restart,randomClick,click,Empate,GanoX,GanoO,turnoX,x,o,state,era
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
-
+				resetPosiciones<=1;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=1;
+				turnoX<=1;
 				
 			end
 			r://------------------------------------
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
-
+				resetPosiciones<=1;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX <= 1;
+				
 				
 				
 			end
@@ -451,13 +404,31 @@ always@(cuadro,restart,randomClick,click,Empate,GanoX,GanoO,turnoX,x,o,state,era
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
-
+				resetPosiciones<=0;
+				resetScore<=1;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX<=1;
+			
 			
 			end
 			retorno: //-----------6------------------
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX <= 1;
 
 				
 			end
@@ -465,14 +436,31 @@ always@(cuadro,restart,randomClick,click,Empate,GanoX,GanoO,turnoX,x,o,state,era
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
-
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX <= 0;
 				
 			end
 			default://------------------------------
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;
-
+				resetPosiciones<=0;
+				resetScore<=0;
+				inc_x_score<=0;
+				inc_o_score<=0;
+				displayStartPlaying<=0;
+				displayGanadorX<=0;
+				displayGanadorO<=0;
+				displayEmpate<=0;
+				turnoX<=1;
+				
 				
 			end 
 				
