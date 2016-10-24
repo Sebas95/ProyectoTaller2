@@ -29,7 +29,9 @@ module TicTacToe(
 	output wire hsync, vsync,
    output wire [2:0] rgb,
 	output wire [8:0] clickedMatrix,
-	output wire [2:0] btn
+	output wire [2:0] btn,
+	output wire restart_on,
+	output wire erase_on
     );
 	 
 	reg clk_50MHz = 0;
@@ -59,12 +61,25 @@ module TicTacToe(
 	wire gnd=0;
 	wire leftDebounced, rightDebounced, centerDebounced;
  
+	wire erase;
+	wire restart;
 	TotalDebouncer debouncer(
 		.sw({left,right,center}),
 		.clk(CLK_100MHZ),
 		.reset(gnd),
 		.debounced({leftDebounced, rightDebounced, centerDebounced})
 		
+    );
+	 
+	 Erase_Restart E_R(
+	 .clk(CLK_100MHZ),
+    .erase(leftDebounced),
+    .restart(rightDebounced),
+    .center(centerDebounced),
+	 .eraseOut(erase),
+	 .restartOut(restart),
+	 .restart_on(restart_on),
+	 .erase_on(erase_on)
     );
 
  
@@ -110,8 +125,8 @@ module TicTacToe(
 		//in
 		.clk_100MHz(CLK_100MHZ),   
 		.cuadro(clickedMatrix),
-		.erase(rightDebounced),
-		.restart(leftDebounced),  
+		.erase(erase),
+		.restart(restart),  
 		.randomClick(btn[1]), //cualquier click
 		//out
 		.x(x_matrix),

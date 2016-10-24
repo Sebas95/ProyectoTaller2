@@ -36,8 +36,8 @@ NET "clickedMatrix[5]" LOC = N11;
 NET "clickedMatrix[4]" LOC = M11;
 NET "clickedMatrix[3]" LOC = V15;
 NET "clickedMatrix[2]" LOC = U15;
-NET "clickedMatrix[1]" LOC = V16;
-NET "clickedMatrix[0]" LOC = U16;
+NET "restart_on" LOC = V16;
+NET "erase_on" LOC = U16;
 
 //NET "btn[0]" LOC = U16;
 
