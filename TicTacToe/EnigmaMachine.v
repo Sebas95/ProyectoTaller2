@@ -71,9 +71,7 @@ module EnigmaMachine(
 					(o[0]&o[3]&o[6])|(o[1]&o[4]&o[7])|(o[2]&o[5]&o[8])|
 					(o[0]&o[4]&o[8])|(o[2]&o[4]&o[6]);
 	//revisa si hay empate				
-	wire Empate = x[0]&x[1]&x[2]&x[3]&x[4]&x[5]&x[6]&x[7]&x[8]&
-					  o[0]&o[1]&o[2]&o[3]&o[4]&o[5]&o[6]&o[7]&o[8]&
-					  (~GanoX)&(~GanoO);
+	wire Empate = ((x|o) == 9'b111111111)&(~GanoX)&(~GanoO);
 	
 
 	
@@ -193,7 +191,7 @@ module EnigmaMachine(
 				displayGanadorX<=0;
 				displayGanadorO<=0;
 				displayEmpate<=0;
-				turnoX <= 1;
+				turnoX <= 0;
 				if(GanoO)			nextState<=ganador_o;
 				else if(Empate)	nextState<=empatando;
 				else if(~click)	nextState<=retorno;
@@ -246,7 +244,7 @@ module EnigmaMachine(
 				displayGanadorX<=0;
 				displayGanadorO<=0;
 				displayEmpate<=0;
-				turnoX <= 1;
+				turnoX <= 0;
 				if(click)
 					nextState<=verposicion_o;
 				else if(erase)
@@ -266,7 +264,7 @@ module EnigmaMachine(
 				displayGanadorX<=1;
 				displayGanadorO<=0;
 				displayEmpate<=0;
-				turnoX <= 1;
+				turnoX <= 0;
 				if(randomClick)	nextState<=inicio;
 				else					nextState<=ganador_x;
 			end
@@ -280,14 +278,13 @@ module EnigmaMachine(
 				displayGanadorX<=0;
 				displayGanadorO<=1;
 				displayEmpate<=0;
-				turnoX <= 1;
-				resetPosiciones<=0;
+				turnoX <= 0;
 				if(randomClick)	nextState<=inicio;
 				else					nextState<=ganador_o;
 			end
 			empatando://--------------------
 			begin
-				resetPosiciones<=0;
+				resetPosiciones<=1;
 				resetScore<=0;
 				inc_x_score<=0;
 				inc_o_score<=0;
