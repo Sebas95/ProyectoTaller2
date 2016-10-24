@@ -76,3 +76,13 @@ TicTacToe/TicTacToe_bitgen.xwbt
 *.xwbt
 *.sym
 *.bit
+WelcomeToTheMachine/db.v
+WelcomeToTheMachine/TurnoDeX.v
+*.ngr
+WelcomeToTheMachine/WelcomeToTheMachine.xise
+*.bit
+*.bit
+*.bit
+*.bit
+TicTacToe/tictactoe.bit
+*.ngr

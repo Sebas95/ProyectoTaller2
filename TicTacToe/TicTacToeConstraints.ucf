@@ -16,12 +16,12 @@ NET "hsync" LOC = N6;
 NET "vsync" LOC = P7;
 
 
-NET "up" CLOCK_DEDICATED_ROUTE = FALSE; 
+NET "center" CLOCK_DEDICATED_ROUTE = FALSE; 
 NET "down" CLOCK_DEDICATED_ROUTE = FALSE; 
 NET "left" CLOCK_DEDICATED_ROUTE = FALSE; 
 NET "right" CLOCK_DEDICATED_ROUTE = FALSE; 
 
-NET "up"  LOC = A8;
+NET "center"  LOC = B8;
 NET "down" LOC = C9;
 NET "left"  LOC = C4;
 NET "right" LOC = D9;

@@ -21,7 +21,7 @@
 module TicTacToe(
 	input wire CLK_100MHZ,
 	input wire reset,
-	input wire up,
+	input wire center,
 	input wire down,	
 	input wire left,
 	input wire right,
@@ -35,40 +35,39 @@ module TicTacToe(
 	reg clk_50MHz = 0;
 	always @(posedge CLK_100MHZ)
 		clk_50MHz = ~clk_50MHz;
-	
+		
 	wire [8:0] xm;
 	wire [8:0] ym;
-
-	//----------------Estos se tienen que cambiar-----------------------------------------//
-	
-	reg cePlayingScreen = 1;// (~ceStartScreen & ~ceWinnerXSreen & ~ceWinnerOSreen & ~ceTieSreen ); 
-	reg ceStartScreen = 0; // start playing
-	reg ceWinnerXSreen = 0; //winner X
-	reg ceWinnerOSreen = 0; //winner O
-	reg ceTieSreen = 0; //Empate
-	
-	reg turnoX = 1;
-	reg turnoO = 0;
-	
-		
-	reg [8:0] x_matrix = 9'b101010100;
-   reg [8:0] o_matrix = ~9'b101010100;
-	
-	//Los Increment tambien 
-	
-	//----------------Hasta aqui se tienen que cambiar-----------------------------------------//
-	
-
-	
 	wire [5:0] scoreX;
 	wire [5:0] scoreO;
-	
 	wire [3:0] digX0 ;
 	wire [3:0] digX1 ;
 	wire [3:0] digO0 ;
 	wire [3:0] digO1 ;
+	wire cePlayingScreen= (~ceStartScreen & ~ceWinnerXSreen & ~ceWinnerOSreen & ~ceTieSreen ); 
+	wire ceStartScreen; // start playing
+	wire ceWinnerXSreen ; //winner X
+	wire ceWinnerOSreen ; //winner O
+	wire ceTieSreen ; //Empate
+	wire turnoX;  //turno actual de x
+	wire turnoO = ~turnoX;  //turno del o
+	wire [8:0] x_matrix; //dice cuales cuadrantes tienen x
+   wire [8:0] o_matrix; //dice cuales cuadrantes tienen o
+	wire incrementScoreX;  //da un punto a X
+	wire incrementScoreO; //da un punto a o
+	wire resetScore; //reset del marcador
+	wire gnd=0;
+	wire leftDebounced, rightDebounced, centerDebounced;
+ 
+	TotalDebouncer debouncer(
+		.sw({left,right,center}),
+		.clk(CLK_100MHZ),
+		.reset(gnd),
+		.debounced({leftDebounced, rightDebounced, centerDebounced})
+		
+    );
 
-		 
+ 
 	TwoDigitDeco tdd(
 		.clk(CLK_100MHZ), //reloj
 		.number(scoreX), //numero de 6 bit
@@ -97,32 +96,34 @@ module TicTacToe(
 	 
    ScoreCounter scoreCounter(
 	 .clk(CLK_100MHZ),
-    .incrementX(up),
-    .incrementO(down),
+    .incrementX(incrementScoreX),
+    .incrementO(incrementScoreO),
     .scoreX(scoreX),
     .scoreO(scoreO),
-	 .reset(left)
+	 .reset(resetScore)
     );	 
-		 
-	FinitStateMachine finit_state_machine(
+	 
+	
+	
+
+	Maquina finit_state_machine(
 		//in
-		.clk_100MHz(CLK_100MHZ), 
-		.reset(), //not implemented yet     
-		.cuadro(),
-		.erase(),
-		.restart(),  
-		.randomClick(),
+		.clk_100MHz(CLK_100MHZ),   
+		.cuadro(clickedMatrix),
+		.erase(rightDebounced),
+		.restart(leftDebounced),  
+		.randomClick(btn[0]), //cualquier click
 		//out
-		.x(),
-		.o(),
-		.resetScore(),
-		.inc_x_score(),
-		.inc_o_score(),
-		.displayStartPlaying(),
-		.displayGanadorX(),
-		.displayGanadorO(),
-		.displayEmpate(),
-		.turnoX(),
+		.x(x_matrix),
+		.o(o_matrix),
+		.resetScore(resetScore),
+		.inc_x_score(incrementScoreX),
+		.inc_o_score(incrementScoreO),
+		.displayStartPlaying(ceStartScreen),
+		.displayGanadorX(ceWinnerXSreen),
+		.displayGanadorO(ceWinnerOSreen),
+		.displayEmpate(ceTieSreen),
+		.turnoX(turnoX),
 		.state()
 		
     );
@@ -130,10 +131,10 @@ module TicTacToe(
    
 		
    VGAPainterColorConfig VGAPCC (
-	.up(up),
-	.down(down),
-	.left(left),
-	.right(right),
+	.up(),
+	.down(),
+	.left(leftDebounced),
+	.right(rightDebounced),
 	.clk_100MHz(CLK_100MHZ),
    .hsync(hsync),
 	.vsync(vsync),
