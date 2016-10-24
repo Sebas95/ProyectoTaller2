@@ -299,8 +299,8 @@ module EnigmaMachine(
 			end
 			r://------------------------------------
 			begin
-				resetPosiciones<=0;
-				resetScore<=1;
+				resetPosiciones<=1;
+				resetScore<=0;
 				inc_x_score<=0;
 				inc_o_score<=0;
 				displayStartPlaying<=0;
