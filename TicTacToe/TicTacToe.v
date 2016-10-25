@@ -38,7 +38,7 @@ module TicTacToe(
 	always @(posedge CLK_100MHZ)
 		clk_50MHz = ~clk_50MHz;
 		
-	wire [8:0] xm;
+	wire [9:0] xm;
 	wire [8:0] ym;
 	wire [5:0] scoreX;
 	wire [5:0] scoreO;
