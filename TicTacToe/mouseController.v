@@ -19,12 +19,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module mouseController(
-		input wire clk, reset,
+		input wire CLK_100MHZ, reset,
 		inout wire ps2d, ps2c,
 		output wire [9:0] posX,
 		output wire [8:0] posY,
 		output wire [2:0] buttons
     );
+	 
+	reg clk = 0;
+	always @(posedge CLK_100MHZ)
+	clk = ~clk;
 
     wire [8:0] xm; //[7:0] magnitud de la velocidad, [8] direcion
 	 wire [8:0] ym; //[7:0] magnitud de la velocidad, [8] direcion

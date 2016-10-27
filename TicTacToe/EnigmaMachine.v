@@ -51,7 +51,7 @@ module EnigmaMachine(
 	 localparam [3:0] r = 						4'b0100; //4
 	 localparam [3:0] e =						4'b0101; //5
 	 localparam [3:0] retorno =			   4'b0110; //6
-	 localparam [3:0] retorno2 =			   4'b0111; //7
+	 localparam [3:0] retorno_a_o =			   4'b0111; //7
 	 localparam [3:0] asignar_x =			   4'b1000; //8
 	 localparam [3:0] asignar_o =			   4'b1001; //9
 	 localparam [3:0] ganador_x =			   4'b1010; //10
@@ -108,7 +108,7 @@ module EnigmaMachine(
 				else if(cuadro[6] & ~x[6] & ~o[6] )	nextState<=asignar_o;					
 				else if(cuadro[7] & ~x[7] & ~o[7] )	nextState<=asignar_o;				
 				else if(cuadro[8] & ~x[8] & ~o[8] )	nextState<=asignar_o;		
-				else 	nextState<= retorno2;
+				else 	nextState<= retorno_a_o;
 			end
 			asignar_x://--------------------
 			begin
@@ -131,7 +131,7 @@ module EnigmaMachine(
 			begin		
 				if(GanoX)			nextState<=ganador_x;
 				else if(Empate)	nextState<=empatando;
-				else if(~click)	nextState<=retorno2;
+				else if(~click)	nextState<=retorno_a_o;
 				else					nextState<= revisar_ganador_X;
 			end
 				retorno: //-----------6------------------
@@ -146,7 +146,7 @@ module EnigmaMachine(
 				else
 					nextState<=retorno;
 			end
-			retorno2: //-----------7------------------
+			retorno_a_o: //-----------7------------------
 			begin
 
 				if(click)
@@ -156,7 +156,7 @@ module EnigmaMachine(
 				else if (restart)
 					nextState<= r;
 				else
-					nextState<=retorno2;
+					nextState<=retorno_a_o;
 			end
 			ganador_x://--------------------
 			begin
@@ -432,7 +432,7 @@ always@(cuadro,restart,randomClick,click,Empate,GanoX,GanoO,turnoX,x,o,state,era
 
 				
 			end
-			retorno2: //-----------7------------------
+			retorno_a_o: //-----------7------------------
 			begin
 				almacenar_x<=9'b0;
 				almacenar_o<=9'b0;

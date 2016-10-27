@@ -19,19 +19,24 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module Maquina(
-	input wire clk_100MHz, restart, erase, randomClick,
-	input wire [8:0]cuadro,
-	output wire displayGanadorX,
-	output wire displayGanadorO,
-	output wire [3:0]state,
-	output wire [8:0]x,
-	output wire [8:0]o,
-	output wire resetScore,
-	output wire inc_x_score,
-	output wire inc_o_score,
-	output wire displayStartPlaying,
-	output wire displayEmpate,
-	output wire turnoX
+	////           INPUTS
+	input wire clk_100MHz, 
+	input wire restart, //señal para reiniciar juego 
+	input wire erase,  //señal para borrar marcador
+	input wire randomClick, //click en cualquier posicion de pantalla
+	input wire [8:0]cuadro, //posición del tablero clickeada
+	//					OUTPUTS
+	output wire displayGanadorX, //desplegar pantalla Winner O
+	output wire displayGanadorO, //desplegar pantalla Winner O
+	output wire [3:0]state, //estado
+	output wire [8:0]x, //1 si la posición es ocupada por X
+	output wire [8:0]o, //1 si la posición es ocupada por O
+	output wire resetScore, //reset del marcador
+	output wire inc_x_score, //incrementar marcador a favor de X
+	output wire inc_o_score, //incrementar marcador a favor de O
+	output wire displayStartPlaying, //desplegar el mensaje "StartPlaying"
+	output wire displayEmpate, //desplegar la pantalla de empate
+	output wire turnoX //turno del jugador X y el negado es del jugador O
     );
 	
 

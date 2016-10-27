@@ -23,7 +23,6 @@ module VGAPainterColorConfig(
 	input wire down,
 	input wire left,
 	input wire right,
-	input wire cePS,
 	input wire ceSS,	
 	input wire clk_100MHz,
 	input wire [9:0] xm, ym,	
@@ -36,11 +35,12 @@ module VGAPainterColorConfig(
 	input wire ganadorX,
 	input wire ganadorO,	
 	input wire tie,
-	 input wire turnoX,
-	 input wire turnoO,	
+	input wire turnoX,
    output wire hsync, vsync,
    output wire [2:0] rgb	
 	);
+	wire turnoO = ~turnoX;  //turno del o
+	wire cePS= (~ceSS & ~ganadorX & ~ganadorO & ~tie );
 	wire [2:0] nextRGB;
 	wire [31:0] txt_on;
 	wire [2:0] video_on;

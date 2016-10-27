@@ -34,9 +34,7 @@ module TicTacToe(
 	output wire erase_on
     );
 	 
-	reg clk_50MHz = 0;
-	always @(posedge CLK_100MHZ)
-		clk_50MHz = ~clk_50MHz;
+	
 		
 	wire [9:0] xm;
 	wire [8:0] ym;
@@ -46,13 +44,12 @@ module TicTacToe(
 	wire [3:0] digX1 ;
 	wire [3:0] digO0 ;
 	wire [3:0] digO1 ;
-	wire cePlayingScreen= (~ceStartScreen & ~ceWinnerXSreen & ~ceWinnerOSreen & ~ceTieSreen ); 
+	 
 	wire ceStartScreen; // start playing
 	wire ceWinnerXSreen ; //winner X
 	wire ceWinnerOSreen ; //winner O
 	wire ceTieSreen ; //Empate
 	wire turnoX;  //turno actual de x
-	wire turnoO = ~turnoX;  //turno del o
 	wire [8:0] x_matrix; //dice cuales cuadrantes tienen x
    wire [8:0] o_matrix; //dice cuales cuadrantes tienen o
 	wire incrementScoreX;  //da un punto a X
@@ -82,23 +79,10 @@ module TicTacToe(
 	 .erase_on(erase_on)
     );
 
- 
-	TwoDigitDeco tdd(
-		.clk(CLK_100MHZ), //reloj
-		.number(scoreX), //numero de 6 bit
-		.decimals(digX0), //decenas
-		.units(digX1) //unidades
-	 );		 
 	 
-	TwoDigitDeco tdd2(
-		.clk(CLK_100MHZ), //reloj
-		.number(scoreO), //numero de 6 bit
-		.decimals(digO0), //decenas
-		.units(digO1) //unidades
-	 );		 
 		 
    mouseController mouseC
-      (.clk(clk_50MHz), .reset(reset), .ps2d(ps2d), .ps2c(ps2c),
+      (.CLK_100MHZ(CLK_100MHZ), .reset(reset), .ps2d(ps2d), .ps2c(ps2c),
        .posX(xm), .posY(ym), .buttons(btn));
 		 
 	clickedSquare clickedSquareInst
@@ -109,16 +93,18 @@ module TicTacToe(
     );
 	 
 	 
-   ScoreCounter scoreCounter(
-	 .clk(CLK_100MHZ),
+  
+	 
+	Score game_Score(
+	 .CLK_100MHZ(CLK_100MHZ),
     .incrementX(incrementScoreX),
     .incrementO(incrementScoreO),
-    .scoreX(scoreX),
-    .scoreO(scoreO),
-	 .reset(resetScore)
-    );	 
-	 
-	
+	 .reset(resetScore),
+	 .decimalsX(digX0), //decenas
+	 .unitsX(digX1), //unidades
+	 .decimalsO(digO0), //decenas
+	 .unitsO(digO1) //unidades
+    );
 	
 
 	Maquina finit_state_machine(
@@ -156,7 +142,6 @@ module TicTacToe(
    .rgb(rgb),
 	.xm(xm),
 	.ym(ym),
-	.cePS(cePlayingScreen),
 	.ceSS(ceStartScreen),
 	.x_matrix(x_matrix),
 	.o_matrix(o_matrix),
@@ -167,8 +152,7 @@ module TicTacToe(
 	.ganadorX(ceWinnerXSreen),
 	.ganadorO(ceWinnerOSreen),
 	.tie(ceTieSreen),
-	.turnoX(turnoX),
-	.turnoO(turnoO)
+	.turnoX(turnoX)
 	);
 
 endmodule
